@@ -279,6 +279,31 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
 #particles-js canvas{ display:block; }
 .hero-content{ position:relative; z-index:2; max-width:760px; padding-block:40px; }
 
+/* Faixa marquee dentro do Hero — contida na largura do .hero-content
+   (diferente da faixa de marca d'água full-bleed logo abaixo do Hero).
+   Conteúdo é montado via JS (buildHeroMarquee) porque troca de idioma;
+   por isso não tem fundo de blur pesado nem nada custoso de renderizar,
+   pra rolar liso mesmo no celular com partículas + parallax já ativos. */
+.hero-marquee{
+  width:100%; overflow:hidden;
+  margin-bottom:22px; padding:9px 0;
+  border-top:1px solid rgba(198,255,94,.25);
+  border-bottom:1px solid rgba(198,255,94,.25);
+  background:rgba(0,0,0,.4);
+  border-radius:var(--radius-sm);
+}
+.hero-marquee-track{
+  display:inline-flex; width:max-content; white-space:nowrap;
+  animation:marquee-scroll 32s linear infinite;
+  will-change:transform;
+}
+.hero-marquee-track span{
+  font-family:var(--font-heading); font-weight:700;
+  font-size:.78rem; text-transform:uppercase; letter-spacing:1.4px;
+  color:var(--color-accent); padding-inline:14px; white-space:nowrap;
+}
+.hero-marquee-track span.sep{ color:rgba(198,255,94,.4); padding-inline:4px; }
+
 /* Logo dentro do Hero: chip com fundo próprio para garantir contraste
    sobre a foto de fundo, não depende do que estiver atrás dela.
    Tamanho = o dobro da versão original (56px -> 112px), responsivo via clamp. */
@@ -806,6 +831,10 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
       <img src="logo-mb-studio.png" alt="MB Studio"> <!-- IMG: logo-mb-studio -->
     </div>
 
+    <div class="hero-marquee" aria-hidden="true">
+      <div class="hero-marquee-track" id="heroMarqueeTrack"></div>
+    </div>
+
     <span class="badge reveal" data-i18n="hero_badge">⭐ 4.9 no Google</span>
 
     <h1 class="hero-title reveal">
@@ -1270,6 +1299,8 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
       hero_title_pre: 'Quem não aparece, não', hero_title_accent: 'vende',
       hero_subtitle: 'Colocamos o seu negócio no topo das buscas do Google para atrair clientes todos os dias.',
       hero_promo: '⚡ Seu site a partir de R$350 · Entrega em até 48h',
+      marquee_delivery: '🚀 Entrega em até 48h', marquee_support: '🔧 Suporte contínuo após entrega',
+      marquee_custom: '💻 Feito sob medida pro seu negócio',
       hero_cta: 'Quero aparecer no Google agora',
       hero_cta_note: 'Resposta em minutos, sem compromisso',
       stat1_label: 'sites entregues', stat2_label: 'de clientes satisfeitos', stat3_label: 'Entrega em poucos dias',
@@ -1345,6 +1376,8 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
       hero_title_pre: "If you're invisible, you don't", hero_title_accent: 'sell',
       hero_subtitle: 'We put your business at the top of Google search results to attract customers every day.',
       hero_promo: '⚡ Your website from $350 · Delivered in up to 48h',
+      marquee_delivery: '🚀 Delivery in up to 48h', marquee_support: '🔧 Ongoing support after delivery',
+      marquee_custom: '💻 Custom-built for your business',
       hero_cta: 'I want to rank on Google now',
       hero_cta_note: 'Reply within minutes, no commitment',
       stat1_label: 'websites delivered', stat2_label: 'of customers satisfied', stat3_label: 'Delivered in just days',
@@ -1420,6 +1453,8 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
       hero_title_pre: 'Si no apareces, no', hero_title_accent: 'vendes',
       hero_subtitle: 'Ponemos tu negocio en el top de las búsquedas de Google para atraer clientes todos los días.',
       hero_promo: '⚡ Tu sitio desde R$350 · Entrega en hasta 48h',
+      marquee_delivery: '🚀 Entrega en hasta 48h', marquee_support: '🔧 Soporte continuo después de la entrega',
+      marquee_custom: '💻 Hecho a medida para tu negocio',
       hero_cta: 'Quiero aparecer en Google ahora',
       hero_cta_note: 'Respuesta en minutos, sin compromiso',
       stat1_label: 'sitios entregados', stat2_label: 'de clientes satisfechos', stat3_label: 'Entrega en pocos días',
@@ -1493,6 +1528,24 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
   window.MB_I18N = I18N;
   window.MB_LANG = 'pt';
 
+  /* Faixa marquee do Hero: montada via JS (não duplicada à mão no HTML)
+     porque o conteúdo muda de idioma. Duplica a sequência 2x pra a
+     animação (translateX 0 -> -50%) fazer um loop perfeitamente contínuo,
+     sem espaço vazio nem salto entre o fim e o começo. */
+  var HERO_MARQUEE_KEYS = [
+    'svc1', 'svc2', 'svc3', 'svc4', 'svc5', 'svc6', 'svc7', 'svc8', 'svc9', 'svc10',
+    'marquee_delivery', 'hero_badge', 'marquee_support', 'marquee_custom'
+  ];
+  function buildHeroMarquee(dict){
+    var track = document.getElementById('heroMarqueeTrack');
+    if (!track) return;
+    var items = HERO_MARQUEE_KEYS.map(function(k){ return dict[k]; }).filter(Boolean);
+    var sequence = items.map(function(text){
+      return '<span>' + text + '</span><span class="sep">•</span>';
+    }).join('');
+    track.innerHTML = sequence + sequence;
+  }
+
   function applyLanguage(lang){
     var dict = I18N[lang] || I18N.pt;
     window.MB_LANG = I18N[lang] ? lang : 'pt';
@@ -1518,6 +1571,8 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
 
     var serviceModalClose = document.getElementById('serviceModalClose');
     if (serviceModalClose && dict.modal_close) serviceModalClose.setAttribute('aria-label', dict.modal_close);
+
+    buildHeroMarquee(dict);
 
     langButtons.forEach(function(b){
       b.classList.toggle('active', b.getAttribute('data-lang') === window.MB_LANG);
