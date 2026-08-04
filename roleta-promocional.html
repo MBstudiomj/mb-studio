@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Roleta de Promoção — MB Studio</title>
+<style>
+  /* ==========================================================
+     ROLETA MB STUDIO — componente independente e reutilizável
+     Basta copiar o bloco <div class="mb-roulette">...</div>,
+     este <style> e este <script> para qualquer página.
+     Todas as classes usam o prefixo "mb-roulette" para não
+     colidir com o CSS do resto do site.
+     ========================================================== */
+
+  html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .mb-roulette-page {
+    height: 100vh;
+    height: 100dvh;
+    margin: 0;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    overflow: hidden;
+  }
+
+  .mb-roulette {
+    --lime: #c6ff5e;
+    --gold: #ffd93d;
+    --white: #ffffff;
+    --black: #000000;
+    position: relative;
+    width: min(420px, 92vw);
+    height: 100%;
+    max-height: 100vh;
+    max-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(10px, 2.5vh, 24px);
+    padding: clamp(10px, 2.5vh, 32px) 20px;
+    box-sizing: border-box;
+  }
+
+  .mb-roulette-title {
+    color: var(--white);
+    text-align: center;
+    font-size: clamp(1.05rem, 4.2vw, 1.5rem);
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    margin: 0;
+  }
+
+  .mb-roulette-title span {
+    color: var(--lime);
+  }
+
+  /* ---- Roda ---- */
+  .mb-roulette-wheel-wrap {
+    position: relative;
+    width: min(320px, 76vw, 42vh);
+    aspect-ratio: 1 / 1;
+    filter: drop-shadow(0 0 25px rgba(198, 255, 94, 0.25));
+  }
+
+  .mb-roulette-pointer {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 16px solid transparent;
+    border-right: 16px solid transparent;
+    border-top: 28px solid var(--lime);
+    z-index: 5;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+  }
+
+  .mb-roulette-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 50%;
+    background: #000;
+    transition: transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+    will-change: transform;
+  }
+
+  .mb-roulette-svg circle.mb-roulette-rim {
+    fill: none;
+    stroke: var(--lime);
+    stroke-width: 6;
+  }
+
+  .mb-roulette-slice-text {
+    font-weight: 800;
+    fill: #000;
+    font-size: 21px;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    pointer-events: none;
+  }
+
+  .mb-roulette-slice-text.small {
+    font-size: 16px;
+  }
+
+  @keyframes mb-roulette-winner-pulse {
+    0%, 100% {
+      filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0));
+    }
+    50% {
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 22px rgba(198, 255, 94, 0.85));
+    }
+  }
+
+  .mb-roulette-winner-slice {
+    animation: mb-roulette-winner-pulse 0.9s ease-in-out 4;
+  }
+
+  /* ---- Hub central (logo) ---- */
+  .mb-roulette-hub {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    aspect-ratio: 1 / 1;
+    background: var(--black);
+    border-radius: 50%;
+    border: 4px solid var(--black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 4;
+    box-shadow: 0 0 0 3px var(--lime);
+    overflow: hidden;
+  }
+
+  .mb-roulette-hub-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+
+  /* ---- Botão girar ---- */
+  .mb-roulette-btn {
+    appearance: none;
+    border: none;
+    cursor: pointer;
+    background: var(--lime);
+    color: #000;
+    font-weight: 800;
+    font-size: clamp(0.9rem, 3vw, 1.05rem);
+    letter-spacing: 0.5px;
+    padding: clamp(12px, 1.8vh, 16px) clamp(28px, 7vw, 48px);
+    border-radius: 999px;
+    text-transform: uppercase;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease, opacity 0.2s ease;
+    box-shadow: 0 0 20px rgba(198, 255, 94, 0.4);
+  }
+
+  .mb-roulette-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 28px rgba(198, 255, 94, 0.6);
+  }
+
+  .mb-roulette-btn:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  .mb-roulette-btn:disabled {
+    background: #4a4a4a;
+    color: #9a9a9a;
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.7;
+  }
+
+  .mb-roulette-footer {
+    color: #666;
+    font-size: 0.65rem;
+    text-align: center;
+    letter-spacing: 0.5px;
+    margin: 0;
+  }
+
+  /* ---- Modal de resultado ---- */
+  .mb-roulette-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 50;
+  }
+
+  .mb-roulette-modal-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .mb-roulette-modal {
+    position: relative;
+    background: #111;
+    border: 2px solid var(--lime);
+    border-radius: 20px;
+    padding: 36px 26px 26px;
+    max-width: 340px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 0 40px rgba(198, 255, 94, 0.35);
+    transform: scale(0.75);
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+  }
+
+  .mb-roulette-modal-overlay.show .mb-roulette-modal {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  .mb-roulette-modal-close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: #888;
+    font-size: 1.7rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: color 0.15s ease;
+  }
+
+  .mb-roulette-modal-close:hover {
+    color: var(--lime);
+  }
+
+  .mb-roulette-result {
+    margin: 0;
+    color: var(--white);
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  .mb-roulette-result .mb-roulette-result-value {
+    color: var(--lime);
+    font-size: 1.5rem;
+  }
+
+  .mb-roulette-urgency {
+    margin: 0;
+    color: var(--gold);
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .mb-roulette-modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  /* ---- Reclamar prêmio ---- */
+  .mb-roulette-claim-btn {
+    display: none;
+    width: 100%;
+    box-sizing: border-box;
+    appearance: none;
+    border: 2px solid var(--lime);
+    cursor: pointer;
+    background: transparent;
+    color: var(--lime);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    padding: 12px 20px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  }
+
+  .mb-roulette-claim-btn.show {
+    display: block;
+  }
+
+  .mb-roulette-claim-btn:hover {
+    background: var(--lime);
+    color: #000;
+    transform: translateY(-2px);
+  }
+
+  .mb-roulette-claim-msg {
+    min-height: 18px;
+    text-align: center;
+    color: var(--lime);
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .mb-roulette-claim-msg.show {
+    opacity: 1;
+  }
+
+  /* ---- Compartilhar no WhatsApp ---- */
+  .mb-roulette-share-btn {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    appearance: none;
+    border: none;
+    cursor: pointer;
+    background: #25d366;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.3px;
+    padding: 12px 20px;
+    border-radius: 999px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .mb-roulette-share-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
+  }
+</style>
+</head>
+<body class="mb-roulette-page">
+
+  <div class="mb-roulette" data-mb-roulette>
+    <h1 class="mb-roulette-title">Gire e ganhe seu <span>desconto</span></h1>
+
+    <div class="mb-roulette-wheel-wrap">
+      <div class="mb-roulette-pointer"></div>
+      <svg class="mb-roulette-svg" viewBox="0 0 400 400" data-mb-roulette-svg>
+        <circle class="mb-roulette-rim" cx="200" cy="200" r="197"></circle>
+      </svg>
+      <div class="mb-roulette-hub">
+        <img src="logo-mb-studio.png" class="mb-roulette-hub-img" alt="MB Studio">
+      </div>
+    </div>
+
+    <button class="mb-roulette-btn" type="button" data-mb-roulette-btn>Girar</button>
+
+    <p class="mb-roulette-footer">Uma tentativa por visitante</p>
+
+    <div class="mb-roulette-modal-overlay" data-mb-roulette-modal-overlay>
+      <div class="mb-roulette-modal" role="dialog" aria-modal="true">
+        <button class="mb-roulette-modal-close" type="button" data-mb-roulette-modal-close aria-label="Fechar">&times;</button>
+
+        <p class="mb-roulette-result" data-mb-roulette-result></p>
+
+        <p class="mb-roulette-urgency">Promoção válida só hoje</p>
+
+        <div class="mb-roulette-modal-actions">
+          <button class="mb-roulette-claim-btn" type="button" data-mb-roulette-claim>Reclamar prêmio</button>
+          <button class="mb-roulette-share-btn" type="button" data-mb-roulette-share>📲 Compartilhar no WhatsApp</button>
+        </div>
+
+        <p class="mb-roulette-claim-msg" data-mb-roulette-claim-msg></p>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ------------------------------------------------------------
+     CONFIGURAÇÃO — mexa só aqui para trocar prêmios/pesos/cores.
+     "weight" define o peso do sorteio (não precisa somar 100,
+     a função normaliza sozinha). Quanto maior, mais provável.
+     ------------------------------------------------------------ */
+  var PRIZES = [
+    { text: '10% OFF',           weight: 35, color: '#c6ff5e' },
+    { text: 'Continue tentando', weight: 20, color: '#ffd93d' },
+    { text: '15% OFF',           weight: 30, color: '#ffffff' },
+    { text: '20% OFF',           weight: 10, color: '#c6ff5e' },
+    { text: '30% OFF',           weight: 5,  color: '#ffd93d' }
+  ];
+
+  var SLICE_ANGLE = 360 / PRIZES.length;
+  var MIN_SPINS = 5;
+  var MAX_SPINS = 8;
+  var SPIN_DURATION_MS = 5000;
+
+  /* ------------------------------------------------------------
+     Som — gerado via Web Audio API (sem arquivos externos).
+     O AudioContext só é criado/retomado dentro de um gesto do
+     usuário (clique no botão) para respeitar a política de
+     autoplay dos navegadores.
+     ------------------------------------------------------------ */
+  var AudioCtx = window.AudioContext || window.webkitAudioContext;
+  var audioCtx = null;
+
+  function getAudioCtx() {
+    if (!AudioCtx) return null;
+    if (!audioCtx) audioCtx = new AudioCtx();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
+  function playSpinSound(durationMs) {
+    var ctx = getAudioCtx();
+    if (!ctx) return;
+    var duration = durationMs / 1000;
+    var now = ctx.currentTime;
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(140, now);
+    osc.frequency.exponentialRampToValueAtTime(900, now + duration);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.14, now + duration * 0.2);
+    gain.gain.exponentialRampToValueAtTime(0.2, now + duration * 0.9);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + duration);
+  }
+
+  function playDingSound() {
+    var ctx = getAudioCtx();
+    if (!ctx) return;
+    var now = ctx.currentTime;
+    var notes = [880, 1318.5];
+    notes.forEach(function (freq, i) {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now);
+      var start = now + i * 0.12;
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(0.3, start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.6);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(start);
+      osc.stop(start + 0.6);
+    });
+  }
+
+  function polarToCartesian(cx, cy, r, angleDeg) {
+    var rad = (angleDeg - 90) * Math.PI / 180;
+    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+  }
+
+  function describeSlice(cx, cy, r, startAngle, endAngle) {
+    var start = polarToCartesian(cx, cy, r, endAngle);
+    var end = polarToCartesian(cx, cy, r, startAngle);
+    var largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
+    return [
+      'M', cx, cy,
+      'L', start.x, start.y,
+      'A', r, r, 0, largeArcFlag, 0, end.x, end.y,
+      'Z'
+    ].join(' ');
+  }
+
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+
+  function buildWheel(svg) {
+    var cx = 200, cy = 200, r = 197;
+    var textRadius = 130;
+
+    PRIZES.forEach(function (prize, i) {
+      var startAngle = i * SLICE_ANGLE;
+      var endAngle = startAngle + SLICE_ANGLE;
+      var mid = startAngle + SLICE_ANGLE / 2;
+
+      var path = document.createElementNS(SVG_NS, 'path');
+      path.setAttribute('d', describeSlice(cx, cy, r, startAngle, endAngle));
+      path.setAttribute('fill', prize.color);
+      path.setAttribute('stroke', '#000');
+      path.setAttribute('stroke-width', '2');
+      path.setAttribute('data-index', i);
+      svg.appendChild(path);
+
+      var pos = polarToCartesian(cx, cy, textRadius, mid);
+
+      var words = prize.text.split(' ');
+      var isLong = prize.text.length > 8;
+
+      var text = document.createElementNS(SVG_NS, 'text');
+      text.setAttribute('x', pos.x);
+      text.setAttribute('y', pos.y);
+      text.setAttribute('class', 'mb-roulette-slice-text' + (isLong ? ' small' : ''));
+
+      if (words.length > 1) {
+        words.forEach(function (word, wi) {
+          var tspan = document.createElementNS(SVG_NS, 'tspan');
+          tspan.setAttribute('x', pos.x);
+          tspan.setAttribute('dy', wi === 0 ? '-0.55em' : '1.1em');
+          tspan.textContent = word;
+          text.appendChild(tspan);
+        });
+      } else {
+        text.textContent = prize.text;
+      }
+
+      svg.appendChild(text);
+    });
+  }
+
+  function pickWeightedIndex() {
+    var total = PRIZES.reduce(function (sum, p) { return sum + p.weight; }, 0);
+    var roll = Math.random() * total;
+    var acc = 0;
+    for (var i = 0; i < PRIZES.length; i++) {
+      acc += PRIZES[i].weight;
+      if (roll < acc) return i;
+    }
+    return PRIZES.length - 1;
+  }
+
+  function buildShareMessage(prize) {
+    var url = window.location.href;
+    if (prize.text === 'Continue tentando') {
+      return 'Estou tentando ganhar desconto na Roleta da MB Studio! Vem tentar a sua sorte também: ' + url;
+    }
+    return 'Acabei de ganhar ' + prize.text + ' na Roleta da MB Studio! Gire você também e garanta seu desconto: ' + url;
+  }
+
+  function initRoulette(root) {
+    var svg = root.querySelector('[data-mb-roulette-svg]');
+    var btn = root.querySelector('[data-mb-roulette-btn]');
+    var modalOverlay = root.querySelector('[data-mb-roulette-modal-overlay]');
+    var modalCloseBtn = root.querySelector('[data-mb-roulette-modal-close]');
+    var resultEl = root.querySelector('[data-mb-roulette-result]');
+    var claimBtn = root.querySelector('[data-mb-roulette-claim]');
+    var claimMsgEl = root.querySelector('[data-mb-roulette-claim-msg]');
+    var shareBtn = root.querySelector('[data-mb-roulette-share]');
+    var hasSpun = false;
+    var currentPrize = null;
+
+    buildWheel(svg);
+
+    function closeModal() {
+      modalOverlay.classList.remove('show');
+    }
+
+    modalCloseBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', function (e) {
+      if (e.target === modalOverlay) closeModal();
+    });
+
+    claimBtn.addEventListener('click', function () {
+      claimMsgEl.textContent = 'Em breve: veja nossos serviços';
+      claimMsgEl.classList.add('show');
+    });
+
+    shareBtn.addEventListener('click', function () {
+      if (!currentPrize) return;
+      var message = buildShareMessage(currentPrize);
+      window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank', 'noopener');
+    });
+
+    btn.addEventListener('click', function () {
+      if (hasSpun) return;
+      hasSpun = true;
+      btn.disabled = true;
+
+      var winnerIndex = pickWeightedIndex();
+      var prize = PRIZES[winnerIndex];
+      currentPrize = prize;
+
+      var sliceStart = winnerIndex * SLICE_ANGLE;
+      var margin = SLICE_ANGLE * 0.18;
+      var landingOffset = margin + Math.random() * (SLICE_ANGLE - margin * 2);
+      var targetAngle = (sliceStart + landingOffset) % 360;
+
+      var fullSpins = MIN_SPINS + Math.floor(Math.random() * (MAX_SPINS - MIN_SPINS + 1));
+      var deltaToTop = (360 - targetAngle) % 360;
+      var totalRotation = fullSpins * 360 + deltaToTop;
+
+      svg.style.transform = 'rotate(' + totalRotation + 'deg)';
+      playSpinSound(SPIN_DURATION_MS);
+
+      window.setTimeout(function () {
+        resultEl.innerHTML = prize.text === 'Continue tentando'
+          ? 'Não foi dessa vez. <span class="mb-roulette-result-value">Continue tentando!</span>'
+          : 'Parabéns! Você ganhou <span class="mb-roulette-result-value">' + prize.text + '</span>';
+        btn.textContent = 'Já girou';
+
+        if (prize.text !== 'Continue tentando') {
+          claimBtn.classList.add('show');
+        }
+
+        var winnerPath = svg.querySelector('path[data-index="' + winnerIndex + '"]');
+        if (winnerPath) {
+          winnerPath.classList.add('mb-roulette-winner-slice');
+        }
+
+        playDingSound();
+        modalOverlay.classList.add('show');
+      }, SPIN_DURATION_MS);
+    });
+  }
+
+  function init() {
+    var roots = document.querySelectorAll('[data-mb-roulette]');
+    roots.forEach ? roots.forEach(initRoulette) : Array.prototype.forEach.call(roots, initRoulette);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+</body>
+</html>

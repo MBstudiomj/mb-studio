@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MB Studio — Sites que vendem</title>
+<meta name="description" content="A MB Studio cria sites, lojas virtuais, apps e sistemas para comerciantes e pequenos negócios que querem vender mais.">
+<link rel="icon" href="logo-mb-studio.png">
+
+<!--
+  ============================================================================
+  MB STUDIO — LANDING PAGE (template reutilizável)
+  ============================================================================
+  Como adaptar para outro cliente:
+  1. Cores/fontes ......... variáveis no topo do bloco <style>, em :root
+  2. Textos ............... procure pelos comentários "TEXTO:" espalhados
+                             pelo <body>, ou edite direto entre as tags
+  3. Imagens .............. troque os arquivos na mesma pasta e ajuste os
+                             atributos src= (marcados com comentário "IMG:")
+  4. WhatsApp / links ..... edite o objeto CONFIG no topo do <script> final
+  5. Roleta promocional ... componente real na seção #roleta (marcado com
+                             "AQUI VAI O COMPONENTE DA ROLETA"). Prêmios e
+                             pesos do sorteio ficam no array PRIZES, no
+                             último <script> do arquivo. É independente:
+                             pode ser copiado (CSS da seção 11 + HTML
+                             data-mb-roulette + esse <script>) para
+                             qualquer outra página.
+  6. Partículas / parallax  seção "Efeitos visuais do Hero" no <script> —
+                             requer as libs particles.js e Rellax.js (CDN)
+  ============================================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+
+<style>
+/* ============================================================================
+   1. VARIÁVEIS GLOBAIS — troque aqui para reaproveitar o template
+   ============================================================================ */
+:root{
+  /* Cores */
+  --color-black:        #000000;
+  --color-black-soft:   #0a0a0a;
+  --color-surface:      #131313;
+  --color-surface-alt:  #1a1a1a;
+  --color-white:        #ffffff;
+  --color-white-soft:   #f2f2f2;
+  --color-muted:        #9a9a9a;
+  --color-muted-soft:   #6f6f6f;
+  --color-accent:       #c6ff5e;  /* verde-limão — cor de destaque da marca */
+  --color-accent-dark:  #9fe536;
+  --color-gold:         #ffd93d;
+  --color-border:       rgba(255,255,255,.1);
+  --color-whatsapp:     #25d366;
+
+  /* Tipografia */
+  --font-heading: 'Poppins', 'Segoe UI', Arial, sans-serif;
+  --font-body:    'Inter', 'Segoe UI', Arial, sans-serif;
+
+  /* Layout */
+  --container-width: 1220px;
+  --radius-sm:  10px;
+  --radius-md:  18px;
+  --radius-lg:  28px;
+  --radius-full: 999px;
+
+  /* Movimento */
+  --ease: cubic-bezier(.16,.84,.44,1);
+  --transition-fast: .2s var(--ease);
+  --transition-base: .45s var(--ease);
+}
+
+/* ============================================================================
+   2. RESET
+   ============================================================================ */
+*, *::before, *::after{ box-sizing: border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+html, body{ overflow-x:hidden; max-width:100%; }
+body{
+  background: var(--color-black);
+  color: var(--color-white-soft);
+  font-family: var(--font-body);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+img{ max-width:100%; display:block; }
+a{ color:inherit; text-decoration:none; }
+ul{ list-style:none; }
+button{ font-family:inherit; border:none; background:none; cursor:pointer; color:inherit; }
+h1,h2,h3,h4{ font-family:var(--font-heading); line-height:1.15; color:var(--color-white); }
+.container{ width:100%; max-width:var(--container-width); margin-inline:auto; padding-inline:24px; }
+section{ position:relative; }
+.text-accent{ color:var(--color-accent); }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+}
+
+/* ============================================================================
+   3. UTILITÁRIOS — títulos de seção, reveal on scroll, botões, ripple
+   ============================================================================ */
+.section-title{
+  font-size:clamp(1.7rem, 4vw, 2.6rem);
+  font-weight:800;
+  text-align:center;
+}
+.section-subtitle{
+  text-align:center;
+  color:var(--color-muted);
+  font-size:clamp(.95rem, 1.6vw, 1.1rem);
+  max-width:560px;
+  margin:14px auto 0;
+}
+.section-pad{ padding:88px 0; }
+
+.reveal{ opacity:0; transform:translateY(26px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+.reveal.in-view{ opacity:1; transform:none; }
+
+.btn{
+  position:relative;
+  overflow:hidden;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:16px 30px;
+  border-radius:var(--radius-full);
+  font-weight:700;
+  font-size:1rem;
+  white-space:nowrap;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+  will-change: transform;
+}
+.btn svg{ width:19px; height:19px; }
+.btn-primary{
+  background:var(--color-accent);
+  color:var(--color-black);
+  box-shadow:0 0 0 0 rgba(198,255,94,.5);
+}
+.btn-primary:hover{
+  background:var(--color-accent-dark);
+  box-shadow:0 8px 30px rgba(198,255,94,.35);
+}
+.btn-lg{ padding:19px 42px; font-size:1.08rem; }
+
+.ripple{
+  position:absolute;
+  border-radius:50%;
+  background:rgba(0,0,0,.25);
+  transform:scale(0);
+  animation:ripple-anim .6s linear;
+  pointer-events:none;
+}
+@keyframes ripple-anim{ to{ transform:scale(4); opacity:0; } }
+
+/* ============================================================================
+   4. HEADER
+   ============================================================================ */
+.site-header{
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  padding:18px 0;
+  background:rgba(0,0,0,.35);
+  border-bottom:1px solid transparent;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  transition:background var(--transition-fast), border-color var(--transition-fast), padding var(--transition-fast);
+}
+.site-header.scrolled{
+  background:rgba(0,0,0,.82);
+  border-color:var(--color-border);
+  padding:12px 0;
+}
+/* Grid de 3 colunas garante que o nav fique centralizado de verdade no
+   header, independente da largura da logo ou das ações à direita. */
+.header-inner{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:16px; }
+.logo{ display:flex; align-items:center; gap:10px; flex-shrink:0; justify-self:start; }
+.logo img{ height:60px; width:auto; max-width:190px; object-fit:contain; } /* IMG: logo-mb-studio */
+
+.nav{ display:flex; align-items:center; gap:36px; justify-self:center; }
+.nav-link{
+  font-weight:600; font-size:.95rem; color:var(--color-white-soft);
+  position:relative; padding:4px 0; white-space:nowrap;
+}
+.nav-link::after{
+  content:''; position:absolute; left:0; bottom:0; width:0; height:2px;
+  background:var(--color-accent); transition:width var(--transition-fast);
+}
+.nav-link:hover{ color:var(--color-white); }
+.nav-link:hover::after{ width:100%; }
+
+.header-actions{ display:flex; align-items:center; gap:14px; flex-shrink:0; justify-self:end; }
+
+/* CTA de destaque no header — some em telas pequenas (o botão flutuante
+   de WhatsApp já cobre a conversão no mobile, evitando lotar o header) */
+.header-cta{
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--color-accent); color:var(--color-black);
+  font-weight:800; font-size:.85rem; white-space:nowrap;
+  padding:10px 20px; border-radius:var(--radius-full);
+  box-shadow:0 4px 16px rgba(198,255,94,.3);
+  transition:transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+}
+.header-cta:hover{
+  background:var(--color-accent-dark);
+  transform:translateY(-1px);
+  box-shadow:0 6px 20px rgba(198,255,94,.45);
+}
+.header-cta svg, .header-cta i{ width:16px; height:16px; }
+@media (max-width:640px){ .header-cta{ display:none; } }
+
+.lang-switch{ display:flex; gap:4px; background:rgba(255,255,255,.06); border:1px solid var(--color-border); border-radius:var(--radius-full); padding:4px; flex-shrink:0; }
+.lang-btn{
+  padding:6px 11px; border-radius:var(--radius-full); font-size:.78rem; font-weight:700;
+  color:var(--color-muted); transition:background var(--transition-fast), color var(--transition-fast);
+  white-space:nowrap; flex-shrink:0;
+}
+.lang-btn.active{ background:var(--color-accent); color:var(--color-black); }
+.lang-btn:not(.active):hover{ color:var(--color-white); }
+
+.hamburger{
+  display:none; flex-direction:column; justify-content:center; gap:5px;
+  width:38px; height:38px; flex-shrink:0;
+}
+.hamburger span{
+  display:block; height:2px; width:100%; background:var(--color-white);
+  border-radius:2px; transition:transform var(--transition-fast), opacity var(--transition-fast);
+}
+body.nav-open .hamburger span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+body.nav-open .hamburger span:nth-child(2){ opacity:0; }
+body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 860px){
+  .nav{
+    position:fixed; inset:0 0 0 auto; top:0; height:100dvh; width:min(78vw, 340px);
+    background:var(--color-black-soft); border-left:1px solid var(--color-border);
+    flex-direction:column; align-items:flex-start; justify-content:center; gap:34px;
+    padding:40px; transform:translateX(100%); transition:transform var(--transition-base);
+    z-index:99;
+  }
+  body.nav-open .nav{ transform:translateX(0); }
+  .nav-link{ font-size:1.3rem; }
+  .hamburger{ display:flex; }
+}
+
+/* ============================================================================
+   5. HERO
+   ============================================================================ */
+.hero{
+  position:relative;
+  min-height:100dvh;
+  display:flex; align-items:center;
+  padding-top:104px;
+  overflow:hidden;
+}
+.hero-bg{
+  /* top/bottom (não %) dão folga real para o parallax do Rellax.js sem
+     depender da altura calculada do .hero, que é auto (min-height). */
+  position:absolute; left:-4vw; right:-4vw; top:-8vh; bottom:-8vh;
+  background-image:url('hero-bg.png'); /* IMG: hero-bg */
+  background-size:cover; background-position:center;
+  z-index:0;
+}
+.hero-overlay{
+  position:absolute; inset:0; z-index:0;
+  background:linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.72) 55%, rgba(0,0,0,.92) 100%);
+}
+/* Camada de partículas (particles.js) — decorativa, não intercepta cliques */
+#particles-js{
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+}
+#particles-js canvas{ display:block; }
+.hero-content{ position:relative; z-index:2; max-width:760px; padding-block:40px; }
+
+/* Logo dentro do Hero: chip com fundo próprio para garantir contraste
+   sobre a foto de fundo, não depende do que estiver atrás dela.
+   Tamanho = o dobro da versão original (56px -> 112px), responsivo via clamp. */
+.hero-logo{
+  display:flex; align-items:center; justify-content:center;
+  width:clamp(88px, 14vw, 112px); height:clamp(88px, 14vw, 112px);
+  border-radius:clamp(18px, 3vw, 28px);
+  background:var(--color-black); border:1.5px solid rgba(198,255,94,.5);
+  box-shadow:0 4px 18px rgba(0,0,0,.4);
+  margin-bottom:18px; overflow:hidden;
+  transition:transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+.hero-logo:hover{
+  transform:scale(1.06);
+  box-shadow:0 10px 34px rgba(198,255,94,.35), 0 4px 18px rgba(0,0,0,.45);
+  border-color:var(--color-accent);
+}
+.hero-logo img{ width:100%; height:100%; object-fit:contain; padding:8px; box-sizing:border-box; }
+
+.badge{
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(198,255,94,.12); border:1px solid rgba(198,255,94,.4);
+  color:var(--color-accent); font-weight:700; font-size:.85rem;
+  padding:8px 16px; border-radius:var(--radius-full); margin-bottom:18px;
+}
+
+/* Selo de promoção — estilo banner de e-commerce, fundo cheio */
+.promo-badge{
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--color-accent); color:var(--color-black);
+  font-weight:800; font-size:.92rem;
+  padding:11px 22px; border-radius:var(--radius-full);
+  box-shadow:0 8px 24px rgba(198,255,94,.4), 0 2px 8px rgba(0,0,0,.3);
+  margin-bottom:22px;
+}
+
+.hero-title{
+  font-size:clamp(2.1rem, 5.6vw, 3.6rem);
+  font-weight:900;
+  letter-spacing:-.5px;
+  line-height:1.08;
+  margin-bottom:16px;
+}
+.hero-title .text-accent{ color:var(--color-accent); }
+
+.hero-subtitle{
+  font-size:clamp(1.02rem, 2vw, 1.25rem);
+  color:var(--color-white-soft);
+  max-width:520px;
+  margin-bottom:26px;
+}
+
+.hero-cta{ display:flex; flex-direction:column; align-items:flex-start; gap:10px; }
+.hero-cta-note{ font-size:.85rem; color:var(--color-muted); padding-left:4px; }
+
+/* ============================================================================
+   6. MARQUEE — marca d'água em movimento
+   ============================================================================ */
+.marquee{
+  overflow:hidden;
+  background:var(--color-black-soft);
+  border-top:1px solid var(--color-border);
+  border-bottom:1px solid var(--color-border);
+  padding:16px 0;
+  position:relative; z-index:3;
+}
+.marquee-track{
+  display:inline-flex; width:max-content;
+  animation:marquee-scroll 26s linear infinite;
+}
+.marquee-track span{
+  display:inline-block;
+  font-family:var(--font-heading);
+  font-weight:800;
+  font-size:clamp(1rem, 2.6vw, 1.6rem);
+  text-transform:uppercase;
+  letter-spacing:2px;
+  color:var(--color-accent);
+  opacity:.9;
+  padding-inline:20px;
+  white-space:nowrap;
+}
+.marquee-track span.sep{ color:var(--color-muted); opacity:.5; padding-inline:8px; }
+@keyframes marquee-scroll{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+.marquee:hover .marquee-track{ animation-play-state:paused; }
+
+/* ============================================================================
+   7. STATS
+   ============================================================================ */
+.stats{ padding:76px 0; background:var(--color-black); }
+.stats-grid{
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:28px;
+  text-align:center;
+}
+.stat-card{
+  background:var(--color-surface); border:1px solid var(--color-border);
+  border-radius:var(--radius-md); padding:36px 20px;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  transition:transform var(--transition-fast), border-color var(--transition-fast);
+}
+.stat-card:hover{ transform:translateY(-6px); border-color:rgba(198,255,94,.4); }
+.stat-number{
+  font-family:var(--font-heading); font-weight:900;
+  font-size:clamp(2.2rem, 5vw, 3rem); color:var(--color-accent);
+}
+.stat-label{ color:var(--color-muted); font-weight:600; font-size:.95rem; }
+.stat-card--text{ justify-content:center; }
+.stat-icon{
+  width:52px; height:52px; border-radius:50%;
+  background:rgba(198,255,94,.12);
+  display:flex; align-items:center; justify-content:center; margin-bottom:6px;
+  animation:pulse-soft 2.4s ease-in-out infinite;
+  font-size:24px; line-height:1;
+}
+.stat-label--big{ color:var(--color-white); font-size:1.15rem; font-weight:700; }
+@keyframes pulse-soft{ 0%,100%{ box-shadow:0 0 0 0 rgba(198,255,94,.35); } 50%{ box-shadow:0 0 0 10px rgba(198,255,94,0); } }
+
+@media (max-width:700px){ .stats-grid{ grid-template-columns:1fr; } }
+
+/* ============================================================================
+   8. SERVIÇOS
+   ============================================================================ */
+.services{ background:var(--color-black-soft); }
+.services-grid{
+  margin-top:52px;
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:20px;
+}
+.service-card{
+  background:var(--color-surface); border:1px solid var(--color-border);
+  border-radius:var(--radius-md); padding:30px 22px;
+  transition:transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+.service-card:hover{
+  transform:translateY(-6px);
+  border-color:rgba(198,255,94,.45);
+  background:var(--color-surface-alt);
+}
+.service-icon{
+  width:50px; height:50px; border-radius:14px;
+  background:rgba(198,255,94,.1); color:var(--color-accent);
+  display:flex; align-items:center; justify-content:center; margin-bottom:18px;
+  transition:background var(--transition-fast), transform var(--transition-fast);
+}
+.service-card:hover .service-icon{ background:var(--color-accent); color:var(--color-black); transform:rotate(-6deg) scale(1.06); }
+.service-icon svg{ width:24px; height:24px; }
+.service-card h3{ font-size:1.05rem; font-weight:700; }
+
+.services-note{
+  text-align:center; margin-top:48px; color:var(--color-white-soft);
+  font-size:1.02rem; font-weight:500;
+}
+.services-note .text-accent{ font-weight:700; }
+
+/* Sublinhado deslizante (esquerda -> direita) ao passar o mouse */
+.link-underline{ position:relative; cursor:pointer; }
+.link-underline::after{
+  content:''; position:absolute; left:0; bottom:-3px; width:0; height:2px;
+  background:currentColor; transition:width var(--transition-fast);
+}
+.link-underline:hover::after{ width:100%; }
+
+@media (max-width:600px){ .services-grid{ grid-template-columns:1fr; } }
+
+/* ============================================================================
+   9. FRASE DE DESTAQUE ISOLADA
+   ============================================================================ */
+.highlight{ padding:100px 0; background:var(--color-black); text-align:center; overflow:hidden; }
+.highlight-text{
+  font-family:var(--font-heading); font-weight:800;
+  font-size:clamp(1.6rem, 4.6vw, 3rem); color:var(--color-white);
+  max-width:820px; margin-inline:auto; letter-spacing:-.5px;
+}
+
+/* ============================================================================
+   10. COMO FUNCIONA
+   ============================================================================ */
+.process{ background:var(--color-black-soft); }
+.process-intro{
+  text-align:center; font-size:clamp(1.1rem, 2.4vw, 1.4rem);
+  font-weight:700; color:var(--color-white); max-width:680px; margin:0 auto 56px;
+}
+.process-steps{
+  display:grid; grid-template-columns:repeat(4, 1fr); gap:24px; position:relative;
+}
+.process-steps::before{
+  content:''; position:absolute; top:26px; left:12.5%; right:12.5%; height:2px;
+  background:repeating-linear-gradient(90deg, var(--color-border) 0 10px, transparent 10px 20px);
+  z-index:0;
+}
+.step{ position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; text-align:center; gap:14px; }
+.step-number{
+  width:52px; height:52px; border-radius:50%;
+  background:var(--color-black); border:2px solid var(--color-accent);
+  color:var(--color-accent); display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-heading); font-weight:800; font-size:1.1rem;
+  transition:background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+.step:hover .step-number{ background:var(--color-accent); color:var(--color-black); transform:scale(1.08); }
+.step h3{ font-size:1.05rem; font-weight:700; }
+.step p{ color:var(--color-muted); font-size:.92rem; max-width:220px; }
+
+@media (max-width:860px){
+  .process-steps{ grid-template-columns:1fr; gap:36px; }
+  .process-steps::before{ display:none; }
+}
+
+/* ============================================================================
+   11. ROLETA — componente real (adaptado de roleta-promocional.html)
+   Todas as classes usam o prefixo "mb-roulette" para não colidir com o
+   restante do CSS da página. Para reutilizar este componente sozinho em
+   outra página, copie este bloco + o HTML com data-mb-roulette + o
+   <script> "COMPONENTE DA ROLETA" no final do arquivo.
+   ============================================================================ */
+.roulette-section{ background:var(--color-black); }
+
+.mb-roulette{
+  --lime: var(--color-accent);
+  --gold: var(--color-gold);
+  position:relative;
+  width:min(420px, 92vw);
+  margin:48px auto 0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:20px;
+}
+
+.mb-roulette-wheel-wrap{
+  position:relative;
+  width:min(300px, 76vw);
+  aspect-ratio:1/1;
+  filter:drop-shadow(0 0 25px rgba(198,255,94,.25));
+}
+
+.mb-roulette-pointer{
+  position:absolute; top:-14px; left:50%; transform:translateX(-50%);
+  width:0; height:0;
+  border-left:16px solid transparent; border-right:16px solid transparent;
+  border-top:28px solid var(--lime);
+  z-index:5;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.6));
+}
+
+.mb-roulette-svg{
+  width:100%; height:100%; display:block; border-radius:50%;
+  background:#000;
+  transition:transform 5s cubic-bezier(.17,.67,.12,.99);
+  will-change:transform;
+}
+.mb-roulette-svg circle.mb-roulette-rim{ fill:none; stroke:var(--lime); stroke-width:6; }
+
+.mb-roulette-slice-text{
+  font-weight:800; fill:#000; font-size:21px;
+  text-anchor:middle; dominant-baseline:middle; pointer-events:none;
+}
+.mb-roulette-slice-text.small{ font-size:16px; }
+
+@keyframes mb-roulette-winner-pulse{
+  0%,100%{ filter:drop-shadow(0 0 0 rgba(255,255,255,0)); }
+  50%{ filter:drop-shadow(0 0 10px rgba(255,255,255,.95)) drop-shadow(0 0 22px rgba(198,255,94,.85)); }
+}
+.mb-roulette-winner-slice{ animation:mb-roulette-winner-pulse .9s ease-in-out 4; }
+
+.mb-roulette-hub{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:30%; aspect-ratio:1/1;
+  background:var(--color-black); border-radius:50%; border:4px solid var(--color-black);
+  display:flex; align-items:center; justify-content:center;
+  z-index:4; box-shadow:0 0 0 3px var(--lime); overflow:hidden;
+}
+.mb-roulette-hub-img{ width:100%; height:100%; object-fit:contain; padding:8px; box-sizing:border-box; }
+
+.mb-roulette-btn{
+  appearance:none; border:none; cursor:pointer;
+  background:var(--lime); color:#000; font-weight:800;
+  font-size:clamp(.9rem, 3vw, 1.05rem); letter-spacing:.5px;
+  padding:clamp(12px, 1.8vh, 16px) clamp(28px, 7vw, 48px);
+  border-radius:var(--radius-full); text-transform:uppercase;
+  transition:transform .15s ease, box-shadow .15s ease, background .2s ease, opacity .2s ease;
+  box-shadow:0 0 20px rgba(198,255,94,.4);
+}
+.mb-roulette-btn:hover:not(:disabled){ transform:translateY(-2px); box-shadow:0 4px 28px rgba(198,255,94,.6); }
+.mb-roulette-btn:active:not(:disabled){ transform:translateY(0); }
+.mb-roulette-btn:disabled{ background:#4a4a4a; color:#9a9a9a; cursor:not-allowed; box-shadow:none; opacity:.7; }
+
+.mb-roulette-footer{ color:var(--color-muted); font-size:.72rem; text-align:center; letter-spacing:.5px; }
+
+.mb-roulette-modal-overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.78); backdrop-filter:blur(2px);
+  display:flex; align-items:center; justify-content:center; padding:20px; box-sizing:border-box;
+  opacity:0; pointer-events:none; transition:opacity .3s ease; z-index:200;
+}
+.mb-roulette-modal-overlay.show{ opacity:1; pointer-events:auto; }
+
+.mb-roulette-modal{
+  position:relative; background:#111; border:2px solid var(--lime); border-radius:20px;
+  padding:36px 26px 26px; max-width:340px; width:100%; max-height:90vh; overflow-y:auto;
+  box-sizing:border-box; text-align:center; display:flex; flex-direction:column; align-items:center; gap:14px;
+  box-shadow:0 0 40px rgba(198,255,94,.35);
+  transform:scale(.75); opacity:0;
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
+}
+.mb-roulette-modal-overlay.show .mb-roulette-modal{ transform:scale(1); opacity:1; }
+
+.mb-roulette-modal-close{
+  position:absolute; top:8px; right:12px; appearance:none; border:none; background:transparent;
+  color:#888; font-size:1.7rem; line-height:1; cursor:pointer; padding:4px 8px; transition:color .15s ease;
+}
+.mb-roulette-modal-close:hover{ color:var(--lime); }
+
+.mb-roulette-result{ margin:0; color:#fff; font-size:1.15rem; font-weight:700; }
+.mb-roulette-result .mb-roulette-result-value{ color:var(--lime); font-size:1.5rem; }
+
+.mb-roulette-urgency{ margin:0; color:var(--gold); font-size:.8rem; font-weight:800; text-transform:uppercase; letter-spacing:.5px; }
+
+.mb-roulette-modal-actions{ display:flex; flex-direction:column; gap:10px; width:100%; }
+
+.mb-roulette-claim-btn{
+  display:none; width:100%; box-sizing:border-box; appearance:none;
+  border:2px solid var(--lime); cursor:pointer; background:transparent; color:var(--lime);
+  font-weight:700; font-size:.95rem; letter-spacing:.5px; padding:12px 20px;
+  border-radius:var(--radius-full); text-transform:uppercase;
+  transition:background .2s ease, color .2s ease, transform .15s ease;
+}
+.mb-roulette-claim-btn.show{ display:block; }
+.mb-roulette-claim-btn:hover{ background:var(--lime); color:#000; transform:translateY(-2px); }
+
+.mb-roulette-claim-msg{
+  min-height:18px; text-align:center; color:var(--lime); font-size:.85rem; font-weight:600;
+  opacity:0; transition:opacity .3s ease;
+}
+.mb-roulette-claim-msg.show{ opacity:1; }
+
+.mb-roulette-share-btn{
+  display:block; width:100%; box-sizing:border-box; appearance:none; border:none; cursor:pointer;
+  background:var(--color-whatsapp); color:#fff; font-weight:700; font-size:.9rem; letter-spacing:.3px;
+  padding:12px 20px; border-radius:var(--radius-full);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.mb-roulette-share-btn:hover{ transform:translateY(-2px); box-shadow:0 4px 20px rgba(37,211,102,.5); }
+
+/* ============================================================================
+   12. PORTFÓLIO
+   ============================================================================ */
+.portfolio{ background:var(--color-black-soft); }
+.portfolio-grid{
+  margin-top:52px;
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:28px;
+}
+.portfolio-card{ display:flex; flex-direction:column; gap:14px; }
+.portfolio-item{
+  position:relative; border-radius:var(--radius-md); overflow:hidden;
+  aspect-ratio:4/3; border:1px solid var(--color-border);
+}
+.portfolio-item img{ width:100%; height:100%; object-fit:cover; transition:transform .6s var(--ease); }
+.portfolio-card:hover .portfolio-item img{ transform:scale(1.08); }
+.portfolio-caption{ text-align:center; }
+.portfolio-caption-title{ display:block; color:var(--color-white); font-weight:700; font-size:1rem; }
+.portfolio-caption-desc{ display:block; color:var(--color-muted); font-size:.85rem; margin-top:4px; }
+
+@media (max-width:600px){ .portfolio-grid{ grid-template-columns:1fr; } }
+
+/* ============================================================================
+   13. AVALIAÇÕES
+   ============================================================================ */
+.reviews{ background:var(--color-black); }
+.reviews-grid{
+  margin-top:52px;
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:24px;
+}
+.review-card{
+  background:var(--color-surface); border:1px solid var(--color-border);
+  border-radius:var(--radius-md); padding:30px; display:flex; flex-direction:column; gap:16px;
+  transition:transform var(--transition-fast), border-color var(--transition-fast);
+}
+.review-card:hover{ transform:translateY(-6px); border-color:rgba(198,255,94,.35); }
+.review-stars{ color:var(--color-gold); letter-spacing:2px; font-size:1.05rem; }
+.review-text{ color:var(--color-white-soft); font-size:.98rem; }
+.review-author{ display:flex; align-items:center; gap:12px; margin-top:auto; }
+.review-avatar{
+  width:42px; height:42px; border-radius:50%; background:var(--color-surface-alt);
+  color:var(--color-accent); display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-family:var(--font-heading); border:1px solid var(--color-border);
+}
+.review-name{ font-weight:700; color:var(--color-white); font-size:.92rem; }
+.review-business{ color:var(--color-muted); font-size:.82rem; }
+
+@media (max-width:600px){ .reviews-grid{ grid-template-columns:1fr; } }
+
+/* ============================================================================
+   14. CTA FINAL
+   ============================================================================ */
+.final-cta{
+  padding:110px 0; text-align:center; background:var(--color-black-soft);
+  border-top:1px solid var(--color-border);
+}
+.final-cta h2{ font-size:clamp(1.7rem, 4.4vw, 2.6rem); margin-bottom:14px; }
+.final-cta p{ color:var(--color-muted); font-size:1.05rem; margin-bottom:36px; }
+
+/* ============================================================================
+   15. RODAPÉ
+   ============================================================================ */
+.site-footer{ padding:32px 0; text-align:center; background:var(--color-black); border-top:1px solid var(--color-border); }
+.footer-inner{ display:flex; align-items:center; justify-content:center; gap:10px; }
+.footer-inner img{ height:26px; width:auto; object-fit:contain; } /* IMG: logo-mb-studio */
+.site-footer p{ color:var(--color-muted); font-size:.88rem; }
+
+/* ============================================================================
+   16. WHATSAPP FLUTUANTE
+   ============================================================================ */
+.whatsapp-float{
+  position:fixed; right:20px; bottom:20px; z-index:90;
+  display:flex; align-items:center; gap:10px;
+  background:var(--color-whatsapp); color:#fff;
+  border-radius:var(--radius-full); padding:16px; overflow:hidden;
+  box-shadow:0 6px 24px rgba(37,211,102,.45);
+  transition:padding var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.whatsapp-float svg{ width:26px; height:26px; flex-shrink:0; }
+.whatsapp-float-label{
+  max-width:0; opacity:0; overflow:hidden; white-space:nowrap;
+  font-weight:700; font-size:.92rem;
+  transition:max-width var(--transition-base), opacity var(--transition-fast) .1s;
+}
+.whatsapp-float:hover{ transform:translateY(-3px); box-shadow:0 10px 30px rgba(37,211,102,.6); }
+.whatsapp-float:hover .whatsapp-float-label, .whatsapp-float.touched .whatsapp-float-label{
+  max-width:160px; opacity:1;
+}
+@keyframes wa-pulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(37,211,102,.55);} 70%{ box-shadow:0 0 0 14px rgba(37,211,102,0);} }
+.whatsapp-float::after{
+  content:''; position:absolute; inset:0; border-radius:inherit; animation:wa-pulse 2.6s ease-in-out infinite; pointer-events:none;
+}
+
+@media (max-width:600px){
+  .whatsapp-float{ right:14px; bottom:14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================================
+     HEADER
+     ============================================================================ -->
+<header class="site-header" id="header">
+  <div class="container header-inner">
+    <a href="#hero" class="logo">
+      <img src="logo-mb-studio.png" alt="MB Studio"> <!-- IMG: logo-mb-studio -->
+    </a>
+
+    <nav class="nav" id="nav">
+      <a href="#servicos" class="nav-link">Serviços</a>
+      <a href="#contato" class="nav-link">Contato</a>
+    </nav>
+
+    <div class="header-actions">
+      <div class="lang-switch" id="langSwitch" aria-label="Selecionar idioma">
+        <button type="button" class="lang-btn active" data-lang="pt">PT</button>
+        <button type="button" class="lang-btn" data-lang="en">EN</button>
+        <button type="button" class="lang-btn" data-lang="es">ES</button>
+      </div>
+      <a href="#" class="header-cta magnetic" data-whatsapp
+         data-wa-text="Olá! Vi o site da MB Studio e quero saber mais sobre criar meu site/app.">
+        <i data-lucide="message-circle"></i> Falar no WhatsApp
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================================
+     HERO
+     ============================================================================ -->
+<section class="hero" id="hero">
+  <div class="hero-bg rellax" data-rellax-speed="-4"></div>
+  <div class="hero-overlay"></div>
+  <div id="particles-js"></div>
+
+  <div class="container hero-content">
+    <div class="hero-logo reveal">
+      <img src="logo-mb-studio.png" alt="MB Studio"> <!-- IMG: logo-mb-studio -->
+    </div>
+
+    <span class="badge reveal">⭐ 4.9 no Google</span>
+
+    <h1 class="hero-title reveal">
+      Quem não aparece, não <span class="text-accent">vende</span>.
+    </h1>
+
+    <p class="hero-subtitle reveal">
+      Colocamos o seu negócio no topo das buscas do Google para atrair clientes todos os dias.
+    </p>
+
+    <span class="promo-badge reveal">⚡ Seu site a partir de R$350 · Entrega em até 48h</span>
+
+    <div class="hero-cta reveal">
+      <a href="#" class="btn btn-primary magnetic" data-whatsapp
+         data-wa-text="Olá! Vi o site da MB Studio e quero saber mais sobre criar meu site/app.">
+        <i data-lucide="message-circle"></i> Quero aparecer no Google agora
+      </a>
+      <span class="hero-cta-note">Resposta em minutos, sem compromisso</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================================
+     MARQUEE — marca d'água em movimento
+     ============================================================================ -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="marqueeTrack">
+    <span>MB STUDIO</span><span class="sep">•</span>
+    <span>SITES</span><span class="sep">•</span>
+    <span>APPS</span><span class="sep">•</span>
+    <span>SISTEMAS</span><span class="sep">•</span>
+    <span>MB STUDIO</span><span class="sep">•</span>
+    <span>SITES</span><span class="sep">•</span>
+    <span>APPS</span><span class="sep">•</span>
+    <span>SISTEMAS</span><span class="sep">•</span>
+  </div>
+</div>
+
+<!-- ============================================================================
+     NÚMEROS / PROVA SOCIAL
+     ============================================================================ -->
+<section class="stats" id="stats">
+  <div class="container stats-grid">
+    <div class="stat-card reveal">
+      <span class="stat-icon" aria-hidden="true">🚀</span>
+      <span class="stat-number" data-target="50" data-prefix="+">0</span>
+      <span class="stat-label">sites entregues</span>
+    </div>
+    <div class="stat-card reveal">
+      <span class="stat-icon" aria-hidden="true">⭐</span>
+      <span class="stat-number" data-target="98" data-suffix="%">0</span>
+      <span class="stat-label">de clientes satisfeitos</span>
+    </div>
+    <div class="stat-card stat-card--text reveal">
+      <span class="stat-icon rellax" data-rellax-speed="1" aria-hidden="true">⏱️</span>
+      <span class="stat-label stat-label--big">Entrega em poucos dias</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================================
+     SERVIÇOS
+     ============================================================================ -->
+<section class="services section-pad" id="servicos">
+  <div class="container">
+    <h2 class="section-title reveal">O que a gente faz por você</h2>
+    <p class="section-subtitle reveal">Site, loja, cardápio, agendamento — o que seu negócio precisar</p>
+
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <span class="service-icon"><i data-lucide="layout-template"></i></span>
+        <h3>Landing Pages</h3>
+      </div>
+      <div class="service-card reveal">
+        <span class="service-icon"><i data-lucide="building-2"></i></span>
+        <h3>Sites Institucionais</h3>
+      </div>
+      <div class="service-card reveal">
+        <span class="service-icon"><i data-lucide="shopping-cart"></i></span>
+        <h3>Lojas Virtuais</h3>
+      </div>
+      <div class="service-card reveal">
+        <span class="service-icon"><i data-lucide="utensils"></i></span>
+        <h3>Cardápio Digital</h3>
+      </div>
+      <div class="service-card reveal">
+        <span class="service-icon"><i data-lucide="calendar-check"></i></span>
+        <h3>Agendamento Online</h3>
+      </div>
+      <div class="service-card reveal">
+        <span class="service-icon"><i data-lucide="message-circle"></i></span>
+        <h3>Automação WhatsApp</h3>
+      </div>
+      <div class="service-card reveal">
+        <span class="service-icon"><i data-lucide="app-window"></i></span>
+        <h3>Aplicativo Web</h3>
+      </div>
+      <div class="service-card reveal">
+        <span class="service-icon"><i data-lucide="target"></i></span>
+        <h3>Páginas de Captura</h3>
+      </div>
+      <div class="service-card reveal">
+        <span class="service-icon"><i data-lucide="wrench"></i></span>
+        <h3>Manutenção de Sites</h3>
+      </div>
+      <div class="service-card reveal">
+        <span class="service-icon"><i data-lucide="zap"></i></span>
+        <h3>MVPs Rápidos</h3>
+      </div>
+    </div>
+
+    <p class="services-note reveal">
+      Não sabe qual serviço escolher? <a href="#" class="text-accent link-underline" data-whatsapp
+      data-wa-text="Olá! Não sei qual serviço escolher, vocês podem me ajudar a decidir?">Fala com a gente</a> que a gente te ajuda a decidir.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================================
+     FRASE DE DESTAQUE ISOLADA
+     ============================================================================ -->
+<section class="highlight">
+  <div class="container">
+    <p class="highlight-text reveal">Você tem a ideia. A gente faz <span class="text-accent">acontecer</span>.</p>
+  </div>
+</section>
+
+<!-- ============================================================================
+     COMO FUNCIONA
+     ============================================================================ -->
+<section class="process section-pad" id="como-funciona">
+  <div class="container">
+    <p class="process-intro reveal">Você conta sua ideia. A gente coloca no ar. Simples assim.</p>
+
+    <div class="process-steps">
+      <div class="step reveal">
+        <span class="step-number">1</span>
+        <h3>Conte sua ideia</h3>
+        <p>Manda pra gente o que você precisa</p>
+      </div>
+      <div class="step reveal">
+        <span class="step-number">2</span>
+        <h3>A gente cria</h3>
+        <p>Desenhamos pensando em vender mais pra você</p>
+      </div>
+      <div class="step reveal">
+        <span class="step-number">3</span>
+        <h3>Você aprova</h3>
+        <p>Ajustamos até ficar do seu jeito</p>
+      </div>
+      <div class="step reveal">
+        <span class="step-number">4</span>
+        <h3>No ar, pronto</h3>
+        <p>Seu site funcionando e recebendo clientes</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================================
+     ROLETA DE PROMOÇÃO
+     ============================================================================ -->
+<section class="roulette-section section-pad" id="roleta">
+  <div class="container">
+    <h2 class="section-title reveal">Gire e ganhe seu desconto</h2>
+    <p class="section-subtitle reveal">Ainda não decidiu? Talvez a sorte ajude</p>
+
+    <!-- AQUI VAI O COMPONENTE DA ROLETA -->
+    <div class="mb-roulette reveal" data-mb-roulette>
+      <div class="mb-roulette-wheel-wrap">
+        <div class="mb-roulette-pointer"></div>
+        <svg class="mb-roulette-svg" viewBox="0 0 400 400" data-mb-roulette-svg>
+          <circle class="mb-roulette-rim" cx="200" cy="200" r="197"></circle>
+        </svg>
+        <div class="mb-roulette-hub">
+          <img src="logo-mb-studio.png" class="mb-roulette-hub-img" alt="MB Studio"> <!-- IMG: logo-mb-studio -->
+        </div>
+      </div>
+
+      <button class="mb-roulette-btn" type="button" data-mb-roulette-btn>Girar</button>
+
+      <p class="mb-roulette-footer">Uma tentativa por visitante</p>
+
+      <div class="mb-roulette-modal-overlay" data-mb-roulette-modal-overlay>
+        <div class="mb-roulette-modal" role="dialog" aria-modal="true">
+          <button class="mb-roulette-modal-close" type="button" data-mb-roulette-modal-close aria-label="Fechar">&times;</button>
+
+          <p class="mb-roulette-result" data-mb-roulette-result></p>
+
+          <p class="mb-roulette-urgency">Promoção válida só hoje</p>
+
+          <div class="mb-roulette-modal-actions">
+            <button class="mb-roulette-claim-btn" type="button" data-mb-roulette-claim>Reclamar prêmio</button>
+            <button class="mb-roulette-share-btn" type="button" data-mb-roulette-share>📲 Compartilhar no WhatsApp</button>
+          </div>
+
+          <p class="mb-roulette-claim-msg" data-mb-roulette-claim-msg></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================================
+     PORTFÓLIO
+     ============================================================================ -->
+<section class="portfolio section-pad" id="portfolio">
+  <div class="container">
+    <h2 class="section-title reveal">O que a gente constrói</h2>
+    <p class="section-subtitle reveal">Isso é só o começo — seu projeto pode ser o próximo</p>
+
+    <div class="portfolio-grid">
+      <div class="portfolio-card reveal">
+        <div class="portfolio-item">
+          <img src="mockup-site.png" alt="Mockup de site institucional criado pela MB Studio"> <!-- IMG: mockup-site -->
+        </div>
+        <p class="portfolio-caption">
+          <span class="portfolio-caption-title">Site institucional</span>
+          <span class="portfolio-caption-desc">Presença profissional para o seu negócio</span>
+        </p>
+      </div>
+      <div class="portfolio-card reveal">
+        <div class="portfolio-item">
+          <img src="mockup-loja.png" alt="Mockup de loja virtual criada pela MB Studio"> <!-- IMG: mockup-loja -->
+        </div>
+        <p class="portfolio-caption">
+          <span class="portfolio-caption-title">Loja virtual</span>
+          <span class="portfolio-caption-desc">Venda online sem complicação</span>
+        </p>
+      </div>
+      <div class="portfolio-card reveal">
+        <div class="portfolio-item">
+          <img src="mockup-whatsapp.png" alt="Mockup de atendimento automático no WhatsApp criado pela MB Studio"> <!-- IMG: mockup-whatsapp -->
+        </div>
+        <p class="portfolio-caption">
+          <span class="portfolio-caption-title">Atendimento automático no WhatsApp</span>
+          <span class="portfolio-caption-desc">Seu cliente manda mensagem, o sistema responde na hora</span>
+        </p>
+      </div>
+      <div class="portfolio-card reveal">
+        <div class="portfolio-item">
+          <img src="mockup-dashboard.png" alt="Mockup de agendamento online criado pela MB Studio"> <!-- IMG: mockup-dashboard -->
+        </div>
+        <p class="portfolio-caption">
+          <span class="portfolio-caption-title">Agendamento online</span>
+          <span class="portfolio-caption-desc">Cliente marca horário sozinho, sem ligação</span>
+        </p>
+      </div>
+      <div class="portfolio-card reveal">
+        <div class="portfolio-item">
+          <img src="mockup-delivery.png" alt="Mockup de cardápio digital com pedidos online criado pela MB Studio"> <!-- IMG: mockup-delivery -->
+        </div>
+        <p class="portfolio-caption">
+          <span class="portfolio-caption-title">Cardápio digital com pedidos online</span>
+          <span class="portfolio-caption-desc">Pedido direto pelo celular, sem complicação</span>
+        </p>
+      </div>
+      <div class="portfolio-card reveal">
+        <div class="portfolio-item">
+          <img src="roleta-inicial.png" alt="Tela inicial da roleta promocional criada pela MB Studio"> <!-- IMG: roleta-inicial -->
+        </div>
+        <p class="portfolio-caption">
+          <span class="portfolio-caption-title">Ferramenta de conversão</span>
+          <span class="portfolio-caption-desc">Roleta de desconto para engajar visitantes</span>
+        </p>
+      </div>
+      <div class="portfolio-card reveal">
+        <div class="portfolio-item">
+          <img src="roleta-resultado.png" alt="Tela de resultado da roleta promocional criada pela MB Studio"> <!-- IMG: roleta-resultado -->
+        </div>
+        <p class="portfolio-caption">
+          <span class="portfolio-caption-title">Ferramenta de conversão</span>
+          <span class="portfolio-caption-desc">Prêmio na hora, direto pelo WhatsApp</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================================
+     AVALIAÇÕES
+     ============================================================================ -->
+<section class="reviews section-pad" id="avaliacoes">
+  <div class="container">
+    <h2 class="section-title reveal">Quem usou, aprovou</h2>
+    <p class="section-subtitle reveal">Confia na gente? Confia primeiro em quem já usou.</p>
+
+    <div class="reviews-grid">
+      <div class="review-card reveal">
+        <span class="review-stars">★★★★★</span>
+        <p class="review-text">"O site ficou muito melhor do que eu esperava. Os clientes elogiam e as vendas aumentaram."</p>
+        <div class="review-author">
+          <span class="review-avatar">R</span>
+          <div>
+            <div class="review-name">Roberta Alves</div>
+            <div class="review-business">Loja de roupas</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card reveal">
+        <span class="review-stars">★★★★★</span>
+        <p class="review-text">"Atendimento rápido e entenderam exatamente o que eu precisava. Recomendo demais."</p>
+        <div class="review-author">
+          <span class="review-avatar">C</span>
+          <div>
+            <div class="review-name">Carlos Mendes</div>
+            <div class="review-business">Restaurante</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card reveal">
+        <span class="review-stars">★★★★★</span>
+        <p class="review-text">"Meu cardápio digital ficou lindo e funcionou desde o primeiro dia. Valeu cada centavo."</p>
+        <div class="review-author">
+          <span class="review-avatar">F</span>
+          <div>
+            <div class="review-name">Fernanda Costa</div>
+            <div class="review-business">Salão de beleza</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================================
+     CONTATO FINAL
+     ============================================================================ -->
+<section class="final-cta" id="contato">
+  <div class="container">
+    <h2 class="reveal">Pronto para ter um site que realmente vende?</h2>
+    <p class="reveal">Fale agora e receba seu orçamento em minutos</p>
+    <a href="#" class="btn btn-primary btn-lg magnetic reveal" data-whatsapp
+       data-wa-text="Olá! Vi o site da MB Studio e quero saber mais sobre criar meu site/app.">
+      Quero meu site
+    </a>
+  </div>
+</section>
+
+<!-- ============================================================================
+     RODAPÉ
+     ============================================================================ -->
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <img src="logo-mb-studio.png" alt="MB Studio"> <!-- IMG: logo-mb-studio -->
+    <p>&copy; <span id="year"></span> MB Studio — Sites que vendem</p>
+  </div>
+</footer>
+
+<!-- ============================================================================
+     WHATSAPP FLUTUANTE
+     ============================================================================ -->
+<a href="#" class="whatsapp-float magnetic" id="whatsappFloat" data-whatsapp
+   data-wa-text="Olá! Quero saber mais sobre os serviços da MB Studio." aria-label="Fale com a gente no WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12.004 2.003c-5.514 0-9.997 4.483-9.997 9.997 0 1.762.462 3.484 1.34 5.004L2 22l5.116-1.342a9.96 9.96 0 0 0 4.888 1.245h.004c5.514 0 9.997-4.483 9.997-9.997 0-2.671-1.04-5.182-2.929-7.071a9.93 9.93 0 0 0-7.072-2.832zm0 18.174h-.003a8.19 8.19 0 0 1-4.17-1.14l-.299-.177-3.037.797.81-2.96-.194-.304a8.164 8.164 0 0 1-1.257-4.393c0-4.517 3.676-8.193 8.153-8.193 2.177 0 4.223.849 5.762 2.39a8.106 8.106 0 0 1 2.386 5.807c0 4.517-3.676 8.173-8.15 8.173z"/>
+  </svg>
+  <span class="whatsapp-float-label">Fale com a gente</span>
+</a>
+
+<!-- Efeitos visuais do Hero: partículas + parallax leve -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/rellax/1.12.1/rellax.min.js"></script>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ==========================================================================
+     CONFIG — edite aqui para reaproveitar o template em outro projeto
+     ========================================================================== */
+  var CONFIG = {
+    whatsappNumber: '5513997458356' /* Telefone: apenas números, com DDI+DDD */
+  };
+  /* Exposto globalmente para outros scripts do site (ex.: componente da
+     roleta) reaproveitarem o mesmo número sem duplicar a configuração. */
+  window.MB_STUDIO_CONFIG = CONFIG;
+
+  /* ==========================================================================
+     Ano no rodapé
+     ========================================================================== */
+  var yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  /* ==========================================================================
+     Links do WhatsApp — monta href a partir do CONFIG
+     ========================================================================== */
+  var waLinks = document.querySelectorAll('[data-whatsapp]');
+  waLinks.forEach ? waLinks.forEach(buildWaLink) : Array.prototype.forEach.call(waLinks, buildWaLink);
+  function buildWaLink(el){
+    var text = el.getAttribute('data-wa-text') || '';
+    var url = 'https://wa.me/' + CONFIG.whatsappNumber + (text ? ('?text=' + encodeURIComponent(text)) : '');
+    el.setAttribute('href', url);
+    el.setAttribute('target', '_blank');
+    el.setAttribute('rel', 'noopener');
+  }
+
+  /* ==========================================================================
+     Ícones Lucide
+     ========================================================================== */
+  function initIcons(){
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+      window.lucide.createIcons();
+    } else {
+      window.setTimeout(initIcons, 150);
+    }
+  }
+  initIcons();
+
+  /* ==========================================================================
+     Header: efeito ao rolar + menu hambúrguer
+     ========================================================================== */
+  var header = document.getElementById('header');
+  function onScrollHeader(){
+    if (window.scrollY > 10) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  }
+  window.addEventListener('scroll', onScrollHeader, { passive: true });
+  onScrollHeader();
+
+  var hamburger = document.getElementById('hamburger');
+  hamburger.addEventListener('click', function(){
+    var open = document.body.classList.toggle('nav-open');
+    hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.querySelectorAll('.nav-link').forEach(function(link){
+    link.addEventListener('click', function(){
+      document.body.classList.remove('nav-open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* ==========================================================================
+     Seletor de idioma (apenas visual por enquanto — sem tradução funcional)
+     ========================================================================== */
+  var langButtons = document.querySelectorAll('.lang-btn');
+  langButtons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      langButtons.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+    });
+  });
+
+  /* ==========================================================================
+     Reveal on scroll
+     ========================================================================== */
+  var revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var revealObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function(el){ revealObserver.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('in-view'); });
+  }
+
+  /* ==========================================================================
+     Animação de contagem dos números
+     ========================================================================== */
+  function animateCount(el){
+    var target = parseFloat(el.getAttribute('data-target')) || 0;
+    var prefix = el.getAttribute('data-prefix') || '';
+    var suffix = el.getAttribute('data-suffix') || '';
+    var duration = 1600;
+    var start = null;
+
+    function step(ts){
+      if (start === null) start = ts;
+      var progress = Math.min((ts - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = prefix + Math.floor(eased * target) + suffix;
+      if (progress < 1) window.requestAnimationFrame(step);
+      else el.textContent = prefix + target + suffix;
+    }
+    window.requestAnimationFrame(step);
+  }
+
+  var statNumbers = document.querySelectorAll('.stat-number');
+  if ('IntersectionObserver' in window) {
+    var statObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          animateCount(entry.target);
+          statObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    statNumbers.forEach(function(el){ statObserver.observe(el); });
+  } else {
+    statNumbers.forEach(animateCount);
+  }
+
+  /* ==========================================================================
+     Botões magnéticos (microinteração) — só em dispositivos com mouse,
+     cursor do navegador permanece o padrão (seta) em toda a página
+     ========================================================================== */
+  var hasFinePointer = window.matchMedia &&
+    window.matchMedia('(pointer: fine) and (hover: hover)').matches;
+
+  if (hasFinePointer) {
+    document.querySelectorAll('.magnetic').forEach(function(el){
+      el.addEventListener('mousemove', function(e){
+        var rect = el.getBoundingClientRect();
+        var x = (e.clientX - rect.left - rect.width / 2) * 0.25;
+        var y = (e.clientY - rect.top - rect.height / 2) * 0.35;
+        el.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+      });
+      el.addEventListener('mouseleave', function(){
+        el.style.transform = '';
+      });
+    });
+  }
+
+  /* ==========================================================================
+     Efeito ripple nos botões
+     ========================================================================== */
+  document.querySelectorAll('.btn').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      var rect = btn.getBoundingClientRect();
+      var size = Math.max(rect.width, rect.height);
+      var ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+      ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+      btn.appendChild(ripple);
+      window.setTimeout(function(){ ripple.remove(); }, 650);
+    });
+  });
+
+  /* ==========================================================================
+     Botão flutuante do WhatsApp: mostra o texto ao tocar (mobile)
+     ========================================================================== */
+  var waFloat = document.getElementById('whatsappFloat');
+  waFloat.addEventListener('touchstart', function(){
+    waFloat.classList.add('touched');
+    window.setTimeout(function(){ waFloat.classList.remove('touched'); }, 2200);
+  }, { passive: true });
+
+  /* ==========================================================================
+     Partículas do Hero (particles.js) — sutis, na cor verde-limão da marca
+     ========================================================================== */
+  var prefersReducedMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!prefersReducedMotion && typeof window.particlesJS === 'function') {
+    window.particlesJS('particles-js', {
+      particles: {
+        number: { value: 45, density: { enable: true, value_area: 900 } },
+        color: { value: '#c6ff5e' },
+        shape: { type: 'circle' },
+        opacity: { value: 0.35, random: true, anim: { enable: true, speed: 0.4, opacity_min: 0.1, sync: false } },
+        size: { value: 2.5, random: true },
+        line_linked: { enable: true, distance: 140, color: '#c6ff5e', opacity: 0.15, width: 1 },
+        move: { enable: true, speed: 0.6, direction: 'none', random: true, straight: false, out_mode: 'out' }
+      },
+      interactivity: {
+        detect_on: 'canvas',
+        events: { onhover: { enable: false }, onclick: { enable: false }, resize: true }
+      },
+      retina_detect: true
+    });
+  }
+
+  /* ==========================================================================
+     Parallax leve (Rellax.js) — aplicado a elementos com a classe "rellax"
+     ========================================================================== */
+  if (!prefersReducedMotion && typeof window.Rellax === 'function') {
+    new window.Rellax('.rellax', { center: false });
+  }
+
+})();
+</script>
+
+<!-- ============================================================================
+     COMPONENTE DA ROLETA — script independente (adaptado de roleta-promocional.html)
+     Prefixo de classes/atributos "mb-roulette" evita conflito com o resto da página.
+     Para reaproveitar em outra página: copie este <script> + o CSS da seção 11 +
+     o HTML com data-mb-roulette.
+     ============================================================================ -->
+<script>
+(function () {
+  'use strict';
+
+  /* Config: "weight" define o peso do sorteio (não precisa somar 100). */
+  var PRIZES = [
+    { text: '10% OFF',           weight: 35, color: '#c6ff5e' },
+    { text: 'Continue tentando', weight: 20, color: '#ffd93d' },
+    { text: '15% OFF',           weight: 30, color: '#ffffff' },
+    { text: '20% OFF',           weight: 10, color: '#c6ff5e' },
+    { text: '30% OFF',           weight: 5,  color: '#ffd93d' }
+  ];
+
+  var SLICE_ANGLE = 360 / PRIZES.length;
+  var MIN_SPINS = 5;
+  var MAX_SPINS = 8;
+  var SPIN_DURATION_MS = 5000;
+
+  var AudioCtx = window.AudioContext || window.webkitAudioContext;
+  var audioCtx = null;
+
+  function getAudioCtx() {
+    if (!AudioCtx) return null;
+    if (!audioCtx) audioCtx = new AudioCtx();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
+  function playSpinSound(durationMs) {
+    var ctx = getAudioCtx();
+    if (!ctx) return;
+    var duration = durationMs / 1000;
+    var now = ctx.currentTime;
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(140, now);
+    osc.frequency.exponentialRampToValueAtTime(900, now + duration);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.14, now + duration * 0.2);
+    gain.gain.exponentialRampToValueAtTime(0.2, now + duration * 0.9);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + duration);
+  }
+
+  function playDingSound() {
+    var ctx = getAudioCtx();
+    if (!ctx) return;
+    var now = ctx.currentTime;
+    var notes = [880, 1318.5];
+    notes.forEach(function (freq, i) {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now);
+      var start = now + i * 0.12;
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(0.3, start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.6);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(start);
+      osc.stop(start + 0.6);
+    });
+  }
+
+  function polarToCartesian(cx, cy, r, angleDeg) {
+    var rad = (angleDeg - 90) * Math.PI / 180;
+    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+  }
+
+  function describeSlice(cx, cy, r, startAngle, endAngle) {
+    var start = polarToCartesian(cx, cy, r, endAngle);
+    var end = polarToCartesian(cx, cy, r, startAngle);
+    var largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
+    return [
+      'M', cx, cy,
+      'L', start.x, start.y,
+      'A', r, r, 0, largeArcFlag, 0, end.x, end.y,
+      'Z'
+    ].join(' ');
+  }
+
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+
+  function buildWheel(svg) {
+    var cx = 200, cy = 200, r = 197;
+    var textRadius = 130;
+
+    PRIZES.forEach(function (prize, i) {
+      var startAngle = i * SLICE_ANGLE;
+      var endAngle = startAngle + SLICE_ANGLE;
+      var mid = startAngle + SLICE_ANGLE / 2;
+
+      var path = document.createElementNS(SVG_NS, 'path');
+      path.setAttribute('d', describeSlice(cx, cy, r, startAngle, endAngle));
+      path.setAttribute('fill', prize.color);
+      path.setAttribute('stroke', '#000');
+      path.setAttribute('stroke-width', '2');
+      path.setAttribute('data-index', i);
+      svg.appendChild(path);
+
+      var pos = polarToCartesian(cx, cy, textRadius, mid);
+
+      var words = prize.text.split(' ');
+      var isLong = prize.text.length > 8;
+
+      var text = document.createElementNS(SVG_NS, 'text');
+      text.setAttribute('x', pos.x);
+      text.setAttribute('y', pos.y);
+      text.setAttribute('class', 'mb-roulette-slice-text' + (isLong ? ' small' : ''));
+
+      if (words.length > 1) {
+        words.forEach(function (word, wi) {
+          var tspan = document.createElementNS(SVG_NS, 'tspan');
+          tspan.setAttribute('x', pos.x);
+          tspan.setAttribute('dy', wi === 0 ? '-0.55em' : '1.1em');
+          tspan.textContent = word;
+          text.appendChild(tspan);
+        });
+      } else {
+        text.textContent = prize.text;
+      }
+
+      svg.appendChild(text);
+    });
+  }
+
+  function pickWeightedIndex() {
+    var total = PRIZES.reduce(function (sum, p) { return sum + p.weight; }, 0);
+    var roll = Math.random() * total;
+    var acc = 0;
+    for (var i = 0; i < PRIZES.length; i++) {
+      acc += PRIZES[i].weight;
+      if (roll < acc) return i;
+    }
+    return PRIZES.length - 1;
+  }
+
+  function buildShareMessage(prize) {
+    var url = window.location.href;
+    if (prize.text === 'Continue tentando') {
+      return 'Estou tentando ganhar desconto na Roleta da MB Studio! Vem tentar a sua sorte também: ' + url;
+    }
+    return 'Acabei de ganhar ' + prize.text + ' na Roleta da MB Studio! Gire você também e garanta seu desconto: ' + url;
+  }
+
+  function initRoulette(root) {
+    var svg = root.querySelector('[data-mb-roulette-svg]');
+    var btn = root.querySelector('[data-mb-roulette-btn]');
+    var modalOverlay = root.querySelector('[data-mb-roulette-modal-overlay]');
+    var modalCloseBtn = root.querySelector('[data-mb-roulette-modal-close]');
+    var resultEl = root.querySelector('[data-mb-roulette-result]');
+    var claimBtn = root.querySelector('[data-mb-roulette-claim]');
+    var claimMsgEl = root.querySelector('[data-mb-roulette-claim-msg]');
+    var shareBtn = root.querySelector('[data-mb-roulette-share]');
+    var hasSpun = false;
+    var currentPrize = null;
+
+    buildWheel(svg);
+
+    function closeModal() {
+      modalOverlay.classList.remove('show');
+    }
+
+    modalCloseBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', function (e) {
+      if (e.target === modalOverlay) closeModal();
+    });
+
+    claimBtn.addEventListener('click', function () {
+      if (!currentPrize) return;
+      /* Extrai só o número do prêmio (ex.: "10% OFF" -> "10") para montar
+         a mensagem — o botão só fica visível quando o prêmio é um desconto
+         percentual, então sempre há um número aqui. */
+      var prizeMatch = currentPrize.text.match(/\d+/);
+      var prizeNumber = prizeMatch ? prizeMatch[0] : currentPrize.text;
+      var message = 'Olá! Girei a roleta da MB Studio e ganhei ' + prizeNumber + '% de desconto! Quero aproveitar essa oferta.';
+      var number = (window.MB_STUDIO_CONFIG && window.MB_STUDIO_CONFIG.whatsappNumber) || '';
+
+      window.open('https://wa.me/' + number + '?text=' + encodeURIComponent(message), '_blank', 'noopener');
+
+      claimMsgEl.textContent = 'Abrindo o WhatsApp...';
+      claimMsgEl.classList.add('show');
+    });
+
+    shareBtn.addEventListener('click', function () {
+      if (!currentPrize) return;
+      var message = buildShareMessage(currentPrize);
+      window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank', 'noopener');
+    });
+
+    btn.addEventListener('click', function () {
+      if (hasSpun) return;
+      hasSpun = true;
+      btn.disabled = true;
+
+      var winnerIndex = pickWeightedIndex();
+      var prize = PRIZES[winnerIndex];
+      currentPrize = prize;
+
+      var sliceStart = winnerIndex * SLICE_ANGLE;
+      var margin = SLICE_ANGLE * 0.18;
+      var landingOffset = margin + Math.random() * (SLICE_ANGLE - margin * 2);
+      var targetAngle = (sliceStart + landingOffset) % 360;
+
+      var fullSpins = MIN_SPINS + Math.floor(Math.random() * (MAX_SPINS - MIN_SPINS + 1));
+      var deltaToTop = (360 - targetAngle) % 360;
+      var totalRotation = fullSpins * 360 + deltaToTop;
+
+      svg.style.transform = 'rotate(' + totalRotation + 'deg)';
+      playSpinSound(SPIN_DURATION_MS);
+
+      window.setTimeout(function () {
+        resultEl.innerHTML = prize.text === 'Continue tentando'
+          ? 'Não foi dessa vez. <span class="mb-roulette-result-value">Continue tentando!</span>'
+          : 'Parabéns! Você ganhou <span class="mb-roulette-result-value">' + prize.text + '</span>';
+        btn.textContent = 'Já girou';
+
+        if (prize.text !== 'Continue tentando') {
+          claimBtn.classList.add('show');
+        }
+
+        var winnerPath = svg.querySelector('path[data-index="' + winnerIndex + '"]');
+        if (winnerPath) {
+          winnerPath.classList.add('mb-roulette-winner-slice');
+        }
+
+        playDingSound();
+        modalOverlay.classList.add('show');
+      }, SPIN_DURATION_MS);
+    });
+  }
+
+  function init() {
+    var roots = document.querySelectorAll('[data-mb-roulette]');
+    roots.forEach ? roots.forEach(initRoulette) : Array.prototype.forEach.call(roots, initRoulette);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
