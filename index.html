@@ -145,6 +145,12 @@ section{ position:relative; }
 }
 .btn-lg{ padding:19px 42px; font-size:1.08rem; }
 
+/* Segurança para textos traduzidos mais longos (EN/ES) em telas pequenas:
+   o botão passa a quebrar linha em vez de estourar a largura da tela. */
+@media (max-width:480px){
+  .btn{ white-space:normal; text-align:center; }
+}
+
 .ripple{
   position:absolute;
   border-radius:50%;
@@ -697,7 +703,7 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
 }
 .whatsapp-float:hover{ transform:translateY(-3px); box-shadow:0 10px 30px rgba(37,211,102,.6); }
 .whatsapp-float:hover .whatsapp-float-label, .whatsapp-float.touched .whatsapp-float-label{
-  max-width:160px; opacity:1;
+  max-width:200px; opacity:1;
 }
 @keyframes wa-pulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(37,211,102,.55);} 70%{ box-shadow:0 0 0 14px rgba(37,211,102,0);} }
 .whatsapp-float::after{
@@ -721,8 +727,8 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
     </a>
 
     <nav class="nav" id="nav">
-      <a href="#servicos" class="nav-link">Serviços</a>
-      <a href="#contato" class="nav-link">Contato</a>
+      <a href="#servicos" class="nav-link" data-i18n="nav_servicos">Serviços</a>
+      <a href="#contato" class="nav-link" data-i18n="nav_contato">Contato</a>
     </nav>
 
     <div class="header-actions">
@@ -732,8 +738,8 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
         <button type="button" class="lang-btn" data-lang="es">ES</button>
       </div>
       <a href="#" class="header-cta magnetic" data-whatsapp
-         data-wa-text="Olá! Vi o site da MB Studio e quero saber mais sobre criar meu site/app.">
-        <i data-lucide="message-circle"></i> Falar no WhatsApp
+         data-i18n-wa="default_wa" data-wa-text="Olá! Vi o site da MB Studio e quero saber mais sobre criar meu site/app.">
+        <i data-lucide="message-circle"></i> <span data-i18n="header_cta">Falar no WhatsApp</span>
       </a>
       <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -755,24 +761,24 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
       <img src="logo-mb-studio.png" alt="MB Studio"> <!-- IMG: logo-mb-studio -->
     </div>
 
-    <span class="badge reveal">⭐ 4.9 no Google</span>
+    <span class="badge reveal" data-i18n="hero_badge">⭐ 4.9 no Google</span>
 
     <h1 class="hero-title reveal">
-      Quem não aparece, não <span class="text-accent">vende</span>.
+      <span data-i18n="hero_title_pre">Quem não aparece, não</span> <span class="text-accent" data-i18n="hero_title_accent">vende</span>.
     </h1>
 
-    <p class="hero-subtitle reveal">
+    <p class="hero-subtitle reveal" data-i18n="hero_subtitle">
       Colocamos o seu negócio no topo das buscas do Google para atrair clientes todos os dias.
     </p>
 
-    <span class="promo-badge reveal">⚡ Seu site a partir de R$350 · Entrega em até 48h</span>
+    <span class="promo-badge reveal" data-i18n="hero_promo">⚡ Seu site a partir de R$350 · Entrega em até 48h</span>
 
     <div class="hero-cta reveal">
       <a href="#" class="btn btn-primary magnetic" data-whatsapp
-         data-wa-text="Olá! Vi o site da MB Studio e quero saber mais sobre criar meu site/app.">
-        <i data-lucide="message-circle"></i> Quero aparecer no Google agora
+         data-i18n-wa="default_wa" data-wa-text="Olá! Vi o site da MB Studio e quero saber mais sobre criar meu site/app.">
+        <i data-lucide="message-circle"></i> <span data-i18n="hero_cta">Quero aparecer no Google agora</span>
       </a>
-      <span class="hero-cta-note">Resposta em minutos, sem compromisso</span>
+      <span class="hero-cta-note" data-i18n="hero_cta_note">Resposta em minutos, sem compromisso</span>
     </div>
   </div>
 </section>
@@ -801,16 +807,16 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
     <div class="stat-card reveal">
       <span class="stat-icon" aria-hidden="true">🚀</span>
       <span class="stat-number" data-target="50" data-prefix="+">0</span>
-      <span class="stat-label">sites entregues</span>
+      <span class="stat-label" data-i18n="stat1_label">sites entregues</span>
     </div>
     <div class="stat-card reveal">
       <span class="stat-icon" aria-hidden="true">⭐</span>
       <span class="stat-number" data-target="98" data-suffix="%">0</span>
-      <span class="stat-label">de clientes satisfeitos</span>
+      <span class="stat-label" data-i18n="stat2_label">de clientes satisfeitos</span>
     </div>
     <div class="stat-card stat-card--text reveal">
       <span class="stat-icon rellax" data-rellax-speed="1" aria-hidden="true">⏱️</span>
-      <span class="stat-label stat-label--big">Entrega em poucos dias</span>
+      <span class="stat-label stat-label--big" data-i18n="stat3_label">Entrega em poucos dias</span>
     </div>
   </div>
 </section>
@@ -820,55 +826,57 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
      ============================================================================ -->
 <section class="services section-pad" id="servicos">
   <div class="container">
-    <h2 class="section-title reveal">O que a gente faz por você</h2>
-    <p class="section-subtitle reveal">Site, loja, cardápio, agendamento — o que seu negócio precisar</p>
+    <h2 class="section-title reveal" data-i18n="services_title">O que a gente faz por você</h2>
+    <p class="section-subtitle reveal" data-i18n="services_subtitle">Site, loja, cardápio, agendamento — o que seu negócio precisar</p>
 
     <div class="services-grid">
       <div class="service-card reveal">
         <span class="service-icon"><i data-lucide="layout-template"></i></span>
-        <h3>Landing Pages</h3>
+        <h3 data-i18n="svc1">Landing Pages</h3>
       </div>
       <div class="service-card reveal">
         <span class="service-icon"><i data-lucide="building-2"></i></span>
-        <h3>Sites Institucionais</h3>
+        <h3 data-i18n="svc2">Sites Institucionais</h3>
       </div>
       <div class="service-card reveal">
         <span class="service-icon"><i data-lucide="shopping-cart"></i></span>
-        <h3>Lojas Virtuais</h3>
+        <h3 data-i18n="svc3">Lojas Virtuais</h3>
       </div>
       <div class="service-card reveal">
         <span class="service-icon"><i data-lucide="utensils"></i></span>
-        <h3>Cardápio Digital</h3>
+        <h3 data-i18n="svc4">Cardápio Digital</h3>
       </div>
       <div class="service-card reveal">
         <span class="service-icon"><i data-lucide="calendar-check"></i></span>
-        <h3>Agendamento Online</h3>
+        <h3 data-i18n="svc5">Agendamento Online</h3>
       </div>
       <div class="service-card reveal">
         <span class="service-icon"><i data-lucide="message-circle"></i></span>
-        <h3>Automação WhatsApp</h3>
+        <h3 data-i18n="svc6">Automação WhatsApp</h3>
       </div>
       <div class="service-card reveal">
         <span class="service-icon"><i data-lucide="app-window"></i></span>
-        <h3>Aplicativo Web</h3>
+        <h3 data-i18n="svc7">Aplicativo Web</h3>
       </div>
       <div class="service-card reveal">
         <span class="service-icon"><i data-lucide="target"></i></span>
-        <h3>Páginas de Captura</h3>
+        <h3 data-i18n="svc8">Páginas de Captura</h3>
       </div>
       <div class="service-card reveal">
         <span class="service-icon"><i data-lucide="wrench"></i></span>
-        <h3>Manutenção de Sites</h3>
+        <h3 data-i18n="svc9">Manutenção de Sites</h3>
       </div>
       <div class="service-card reveal">
         <span class="service-icon"><i data-lucide="zap"></i></span>
-        <h3>MVPs Rápidos</h3>
+        <h3 data-i18n="svc10">MVPs Rápidos</h3>
       </div>
     </div>
 
     <p class="services-note reveal">
-      Não sabe qual serviço escolher? <a href="#" class="text-accent link-underline" data-whatsapp
-      data-wa-text="Olá! Não sei qual serviço escolher, vocês podem me ajudar a decidir?">Fala com a gente</a> que a gente te ajuda a decidir.
+      <span data-i18n="services_note_pre">Não sabe qual serviço escolher?</span>
+      <a href="#" class="text-accent link-underline" data-whatsapp
+         data-i18n-wa="services_note_wa" data-wa-text="Olá! Não sei qual serviço escolher, vocês podem me ajudar a decidir?"><span data-i18n="services_note_link">Fala com a gente</span></a>
+      <span data-i18n="services_note_post">que a gente te ajuda a decidir.</span>
     </p>
   </div>
 </section>
@@ -878,7 +886,7 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
      ============================================================================ -->
 <section class="highlight">
   <div class="container">
-    <p class="highlight-text reveal">Você tem a ideia. A gente faz <span class="text-accent">acontecer</span>.</p>
+    <p class="highlight-text reveal"><span data-i18n="highlight_pre">Você tem a ideia. A gente faz</span> <span class="text-accent" data-i18n="highlight_accent">acontecer</span>.</p>
   </div>
 </section>
 
@@ -887,28 +895,28 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
      ============================================================================ -->
 <section class="process section-pad" id="como-funciona">
   <div class="container">
-    <p class="process-intro reveal">Você conta sua ideia. A gente coloca no ar. Simples assim.</p>
+    <p class="process-intro reveal" data-i18n="process_intro">Você conta sua ideia. A gente coloca no ar. Simples assim.</p>
 
     <div class="process-steps">
       <div class="step reveal">
         <span class="step-number">1</span>
-        <h3>Conte sua ideia</h3>
-        <p>Manda pra gente o que você precisa</p>
+        <h3 data-i18n="step1_title">Conte sua ideia</h3>
+        <p data-i18n="step1_desc">Manda pra gente o que você precisa</p>
       </div>
       <div class="step reveal">
         <span class="step-number">2</span>
-        <h3>A gente cria</h3>
-        <p>Desenhamos pensando em vender mais pra você</p>
+        <h3 data-i18n="step2_title">A gente cria</h3>
+        <p data-i18n="step2_desc">Desenhamos pensando em vender mais pra você</p>
       </div>
       <div class="step reveal">
         <span class="step-number">3</span>
-        <h3>Você aprova</h3>
-        <p>Ajustamos até ficar do seu jeito</p>
+        <h3 data-i18n="step3_title">Você aprova</h3>
+        <p data-i18n="step3_desc">Ajustamos até ficar do seu jeito</p>
       </div>
       <div class="step reveal">
         <span class="step-number">4</span>
-        <h3>No ar, pronto</h3>
-        <p>Seu site funcionando e recebendo clientes</p>
+        <h3 data-i18n="step4_title">No ar, pronto</h3>
+        <p data-i18n="step4_desc">Seu site funcionando e recebendo clientes</p>
       </div>
     </div>
   </div>
@@ -919,8 +927,8 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
      ============================================================================ -->
 <section class="roulette-section section-pad" id="roleta">
   <div class="container">
-    <h2 class="section-title reveal">Gire e ganhe seu desconto</h2>
-    <p class="section-subtitle reveal">Ainda não decidiu? Talvez a sorte ajude</p>
+    <h2 class="section-title reveal" data-i18n="roleta_title">Gire e ganhe seu desconto</h2>
+    <p class="section-subtitle reveal" data-i18n="roleta_subtitle">Ainda não decidiu? Talvez a sorte ajude</p>
 
     <!-- AQUI VAI O COMPONENTE DA ROLETA -->
     <div class="mb-roulette reveal" data-mb-roulette>
@@ -934,9 +942,9 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
         </div>
       </div>
 
-      <button class="mb-roulette-btn" type="button" data-mb-roulette-btn>Girar</button>
+      <button class="mb-roulette-btn" type="button" data-mb-roulette-btn data-i18n="roleta_spin">Girar</button>
 
-      <p class="mb-roulette-footer">Uma tentativa por visitante</p>
+      <p class="mb-roulette-footer" data-i18n="roleta_footer">Uma tentativa por visitante</p>
 
       <div class="mb-roulette-modal-overlay" data-mb-roulette-modal-overlay>
         <div class="mb-roulette-modal" role="dialog" aria-modal="true">
@@ -944,11 +952,11 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
 
           <p class="mb-roulette-result" data-mb-roulette-result></p>
 
-          <p class="mb-roulette-urgency">Promoção válida só hoje</p>
+          <p class="mb-roulette-urgency" data-i18n="roleta_urgency">Promoção válida só hoje</p>
 
           <div class="mb-roulette-modal-actions">
-            <button class="mb-roulette-claim-btn" type="button" data-mb-roulette-claim>Reclamar prêmio</button>
-            <button class="mb-roulette-share-btn" type="button" data-mb-roulette-share>📲 Compartilhar no WhatsApp</button>
+            <button class="mb-roulette-claim-btn" type="button" data-mb-roulette-claim data-i18n="roleta_claim">Reclamar prêmio</button>
+            <button class="mb-roulette-share-btn" type="button" data-mb-roulette-share data-i18n="roleta_share">📲 Compartilhar no WhatsApp</button>
           </div>
 
           <p class="mb-roulette-claim-msg" data-mb-roulette-claim-msg></p>
@@ -963,8 +971,8 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
      ============================================================================ -->
 <section class="portfolio section-pad" id="portfolio">
   <div class="container">
-    <h2 class="section-title reveal">O que a gente constrói</h2>
-    <p class="section-subtitle reveal">Isso é só o começo — seu projeto pode ser o próximo</p>
+    <h2 class="section-title reveal" data-i18n="portfolio_title">O que a gente constrói</h2>
+    <p class="section-subtitle reveal" data-i18n="portfolio_subtitle">Isso é só o começo — seu projeto pode ser o próximo</p>
 
     <div class="portfolio-grid">
       <div class="portfolio-card reveal">
@@ -972,8 +980,8 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
           <img src="mockup-site.png" alt="Mockup de site institucional criado pela MB Studio"> <!-- IMG: mockup-site -->
         </div>
         <p class="portfolio-caption">
-          <span class="portfolio-caption-title">Site institucional</span>
-          <span class="portfolio-caption-desc">Presença profissional para o seu negócio</span>
+          <span class="portfolio-caption-title" data-i18n="pf1_title">Site institucional</span>
+          <span class="portfolio-caption-desc" data-i18n="pf1_desc">Presença profissional para o seu negócio</span>
         </p>
       </div>
       <div class="portfolio-card reveal">
@@ -981,8 +989,8 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
           <img src="mockup-loja.png" alt="Mockup de loja virtual criada pela MB Studio"> <!-- IMG: mockup-loja -->
         </div>
         <p class="portfolio-caption">
-          <span class="portfolio-caption-title">Loja virtual</span>
-          <span class="portfolio-caption-desc">Venda online sem complicação</span>
+          <span class="portfolio-caption-title" data-i18n="pf2_title">Loja virtual</span>
+          <span class="portfolio-caption-desc" data-i18n="pf2_desc">Venda online sem complicação</span>
         </p>
       </div>
       <div class="portfolio-card reveal">
@@ -990,8 +998,8 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
           <img src="mockup-whatsapp.png" alt="Mockup de atendimento automático no WhatsApp criado pela MB Studio"> <!-- IMG: mockup-whatsapp -->
         </div>
         <p class="portfolio-caption">
-          <span class="portfolio-caption-title">Atendimento automático no WhatsApp</span>
-          <span class="portfolio-caption-desc">Seu cliente manda mensagem, o sistema responde na hora</span>
+          <span class="portfolio-caption-title" data-i18n="pf3_title">Atendimento automático no WhatsApp</span>
+          <span class="portfolio-caption-desc" data-i18n="pf3_desc">Seu cliente manda mensagem, o sistema responde na hora</span>
         </p>
       </div>
       <div class="portfolio-card reveal">
@@ -999,8 +1007,8 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
           <img src="mockup-dashboard.png" alt="Mockup de agendamento online criado pela MB Studio"> <!-- IMG: mockup-dashboard -->
         </div>
         <p class="portfolio-caption">
-          <span class="portfolio-caption-title">Agendamento online</span>
-          <span class="portfolio-caption-desc">Cliente marca horário sozinho, sem ligação</span>
+          <span class="portfolio-caption-title" data-i18n="pf4_title">Agendamento online</span>
+          <span class="portfolio-caption-desc" data-i18n="pf4_desc">Cliente marca horário sozinho, sem ligação</span>
         </p>
       </div>
       <div class="portfolio-card reveal">
@@ -1008,8 +1016,8 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
           <img src="mockup-delivery.png" alt="Mockup de cardápio digital com pedidos online criado pela MB Studio"> <!-- IMG: mockup-delivery -->
         </div>
         <p class="portfolio-caption">
-          <span class="portfolio-caption-title">Cardápio digital com pedidos online</span>
-          <span class="portfolio-caption-desc">Pedido direto pelo celular, sem complicação</span>
+          <span class="portfolio-caption-title" data-i18n="pf5_title">Cardápio digital com pedidos online</span>
+          <span class="portfolio-caption-desc" data-i18n="pf5_desc">Pedido direto pelo celular, sem complicação</span>
         </p>
       </div>
       <div class="portfolio-card reveal">
@@ -1017,8 +1025,8 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
           <img src="roleta-inicial.png" alt="Tela inicial da roleta promocional criada pela MB Studio"> <!-- IMG: roleta-inicial -->
         </div>
         <p class="portfolio-caption">
-          <span class="portfolio-caption-title">Ferramenta de conversão</span>
-          <span class="portfolio-caption-desc">Roleta de desconto para engajar visitantes</span>
+          <span class="portfolio-caption-title" data-i18n="pf6_title">Ferramenta de conversão</span>
+          <span class="portfolio-caption-desc" data-i18n="pf6_desc">Roleta de desconto para engajar visitantes</span>
         </p>
       </div>
       <div class="portfolio-card reveal">
@@ -1026,8 +1034,8 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
           <img src="roleta-resultado.png" alt="Tela de resultado da roleta promocional criada pela MB Studio"> <!-- IMG: roleta-resultado -->
         </div>
         <p class="portfolio-caption">
-          <span class="portfolio-caption-title">Ferramenta de conversão</span>
-          <span class="portfolio-caption-desc">Prêmio na hora, direto pelo WhatsApp</span>
+          <span class="portfolio-caption-title" data-i18n="pf7_title">Ferramenta de conversão</span>
+          <span class="portfolio-caption-desc" data-i18n="pf7_desc">Prêmio na hora, direto pelo WhatsApp</span>
         </p>
       </div>
     </div>
@@ -1039,40 +1047,40 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
      ============================================================================ -->
 <section class="reviews section-pad" id="avaliacoes">
   <div class="container">
-    <h2 class="section-title reveal">Quem usou, aprovou</h2>
-    <p class="section-subtitle reveal">Confia na gente? Confia primeiro em quem já usou.</p>
+    <h2 class="section-title reveal" data-i18n="reviews_title">Quem usou, aprovou</h2>
+    <p class="section-subtitle reveal" data-i18n="reviews_subtitle">Confia na gente? Confia primeiro em quem já usou.</p>
 
     <div class="reviews-grid">
       <div class="review-card reveal">
         <span class="review-stars">★★★★★</span>
-        <p class="review-text">"O site ficou muito melhor do que eu esperava. Os clientes elogiam e as vendas aumentaram."</p>
+        <p class="review-text" data-i18n="review1_text">"O site ficou muito melhor do que eu esperava. Os clientes elogiam e as vendas aumentaram."</p>
         <div class="review-author">
           <span class="review-avatar">R</span>
           <div>
             <div class="review-name">Roberta Alves</div>
-            <div class="review-business">Loja de roupas</div>
+            <div class="review-business" data-i18n="review1_business">Loja de roupas</div>
           </div>
         </div>
       </div>
       <div class="review-card reveal">
         <span class="review-stars">★★★★★</span>
-        <p class="review-text">"Atendimento rápido e entenderam exatamente o que eu precisava. Recomendo demais."</p>
+        <p class="review-text" data-i18n="review2_text">"Atendimento rápido e entenderam exatamente o que eu precisava. Recomendo demais."</p>
         <div class="review-author">
           <span class="review-avatar">C</span>
           <div>
             <div class="review-name">Carlos Mendes</div>
-            <div class="review-business">Restaurante</div>
+            <div class="review-business" data-i18n="review2_business">Restaurante</div>
           </div>
         </div>
       </div>
       <div class="review-card reveal">
         <span class="review-stars">★★★★★</span>
-        <p class="review-text">"Meu cardápio digital ficou lindo e funcionou desde o primeiro dia. Valeu cada centavo."</p>
+        <p class="review-text" data-i18n="review3_text">"Meu cardápio digital ficou lindo e funcionou desde o primeiro dia. Valeu cada centavo."</p>
         <div class="review-author">
           <span class="review-avatar">F</span>
           <div>
             <div class="review-name">Fernanda Costa</div>
-            <div class="review-business">Salão de beleza</div>
+            <div class="review-business" data-i18n="review3_business">Salão de beleza</div>
           </div>
         </div>
       </div>
@@ -1085,11 +1093,11 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
      ============================================================================ -->
 <section class="final-cta" id="contato">
   <div class="container">
-    <h2 class="reveal">Pronto para ter um site que realmente vende?</h2>
-    <p class="reveal">Fale agora e receba seu orçamento em minutos</p>
+    <h2 class="reveal" data-i18n="final_title">Pronto para ter um site que realmente vende?</h2>
+    <p class="reveal" data-i18n="final_subtitle">Fale agora e receba seu orçamento em minutos</p>
     <a href="#" class="btn btn-primary btn-lg magnetic reveal" data-whatsapp
-       data-wa-text="Olá! Vi o site da MB Studio e quero saber mais sobre criar meu site/app.">
-      Quero meu site
+       data-i18n-wa="default_wa" data-wa-text="Olá! Vi o site da MB Studio e quero saber mais sobre criar meu site/app.">
+      <span data-i18n="final_cta">Quero meu site</span>
     </a>
   </div>
 </section>
@@ -1100,7 +1108,7 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
 <footer class="site-footer">
   <div class="container footer-inner">
     <img src="logo-mb-studio.png" alt="MB Studio"> <!-- IMG: logo-mb-studio -->
-    <p>&copy; <span id="year"></span> MB Studio — Sites que vendem</p>
+    <p>&copy; <span id="year"></span> MB Studio — <span data-i18n="footer_tagline">Sites que vendem</span></p>
   </div>
 </footer>
 
@@ -1108,12 +1116,12 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
      WHATSAPP FLUTUANTE
      ============================================================================ -->
 <a href="#" class="whatsapp-float magnetic" id="whatsappFloat" data-whatsapp
-   data-wa-text="Olá! Quero saber mais sobre os serviços da MB Studio." aria-label="Fale com a gente no WhatsApp">
+   data-i18n-wa="float_wa" data-wa-text="Olá! Quero saber mais sobre os serviços da MB Studio." aria-label="Fale com a gente no WhatsApp">
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
     <path d="M12.004 2.003c-5.514 0-9.997 4.483-9.997 9.997 0 1.762.462 3.484 1.34 5.004L2 22l5.116-1.342a9.96 9.96 0 0 0 4.888 1.245h.004c5.514 0 9.997-4.483 9.997-9.997 0-2.671-1.04-5.182-2.929-7.071a9.93 9.93 0 0 0-7.072-2.832zm0 18.174h-.003a8.19 8.19 0 0 1-4.17-1.14l-.299-.177-3.037.797.81-2.96-.194-.304a8.164 8.164 0 0 1-1.257-4.393c0-4.517 3.676-8.193 8.153-8.193 2.177 0 4.223.849 5.762 2.39a8.106 8.106 0 0 1 2.386 5.807c0 4.517-3.676 8.173-8.15 8.173z"/>
   </svg>
-  <span class="whatsapp-float-label">Fale com a gente</span>
+  <span class="whatsapp-float-label" data-i18n="whatsapp_float_label">Fale com a gente</span>
 </a>
 
 <!-- Efeitos visuais do Hero: partículas + parallax leve -->
@@ -1189,15 +1197,213 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
   });
 
   /* ==========================================================================
-     Seletor de idioma (apenas visual por enquanto — sem tradução funcional)
+     Tradução (PT / EN / ES) — dicionário + troca de idioma funcional
+     Para adicionar um texto novo: 1) marque o elemento com data-i18n="chave"
+     (ou data-i18n-wa="chave" para mensagens de WhatsApp) 2) adicione "chave"
+     nos três idiomas abaixo.
      ========================================================================== */
+  var I18N = {
+    pt: {
+      nav_servicos: 'Serviços', nav_contato: 'Contato', header_cta: 'Falar no WhatsApp',
+      hero_badge: '⭐ 4.9 no Google',
+      hero_title_pre: 'Quem não aparece, não', hero_title_accent: 'vende',
+      hero_subtitle: 'Colocamos o seu negócio no topo das buscas do Google para atrair clientes todos os dias.',
+      hero_promo: '⚡ Seu site a partir de R$350 · Entrega em até 48h',
+      hero_cta: 'Quero aparecer no Google agora',
+      hero_cta_note: 'Resposta em minutos, sem compromisso',
+      stat1_label: 'sites entregues', stat2_label: 'de clientes satisfeitos', stat3_label: 'Entrega em poucos dias',
+      services_title: 'O que a gente faz por você',
+      services_subtitle: 'Site, loja, cardápio, agendamento — o que seu negócio precisar',
+      svc1: 'Landing Pages', svc2: 'Sites Institucionais', svc3: 'Lojas Virtuais', svc4: 'Cardápio Digital',
+      svc5: 'Agendamento Online', svc6: 'Automação WhatsApp', svc7: 'Aplicativo Web', svc8: 'Páginas de Captura',
+      svc9: 'Manutenção de Sites', svc10: 'MVPs Rápidos',
+      services_note_pre: 'Não sabe qual serviço escolher?', services_note_link: 'Fala com a gente',
+      services_note_post: 'que a gente te ajuda a decidir.',
+      highlight_pre: 'Você tem a ideia. A gente faz', highlight_accent: 'acontecer',
+      process_intro: 'Você conta sua ideia. A gente coloca no ar. Simples assim.',
+      step1_title: 'Conte sua ideia', step1_desc: 'Manda pra gente o que você precisa',
+      step2_title: 'A gente cria', step2_desc: 'Desenhamos pensando em vender mais pra você',
+      step3_title: 'Você aprova', step3_desc: 'Ajustamos até ficar do seu jeito',
+      step4_title: 'No ar, pronto', step4_desc: 'Seu site funcionando e recebendo clientes',
+      roleta_title: 'Gire e ganhe seu desconto', roleta_subtitle: 'Ainda não decidiu? Talvez a sorte ajude',
+      roleta_spin: 'Girar', roleta_footer: 'Uma tentativa por visitante', roleta_urgency: 'Promoção válida só hoje',
+      roleta_claim: 'Reclamar prêmio', roleta_share: '📲 Compartilhar no WhatsApp',
+      portfolio_title: 'O que a gente constrói', portfolio_subtitle: 'Isso é só o começo — seu projeto pode ser o próximo',
+      pf1_title: 'Site institucional', pf1_desc: 'Presença profissional para o seu negócio',
+      pf2_title: 'Loja virtual', pf2_desc: 'Venda online sem complicação',
+      pf3_title: 'Atendimento automático no WhatsApp', pf3_desc: 'Seu cliente manda mensagem, o sistema responde na hora',
+      pf4_title: 'Agendamento online', pf4_desc: 'Cliente marca horário sozinho, sem ligação',
+      pf5_title: 'Cardápio digital com pedidos online', pf5_desc: 'Pedido direto pelo celular, sem complicação',
+      pf6_title: 'Ferramenta de conversão', pf6_desc: 'Roleta de desconto para engajar visitantes',
+      pf7_title: 'Ferramenta de conversão', pf7_desc: 'Prêmio na hora, direto pelo WhatsApp',
+      reviews_title: 'Quem usou, aprovou', reviews_subtitle: 'Confia na gente? Confia primeiro em quem já usou.',
+      review1_text: '"O site ficou muito melhor do que eu esperava. Os clientes elogiam e as vendas aumentaram."', review1_business: 'Loja de roupas',
+      review2_text: '"Atendimento rápido e entenderam exatamente o que eu precisava. Recomendo demais."', review2_business: 'Restaurante',
+      review3_text: '"Meu cardápio digital ficou lindo e funcionou desde o primeiro dia. Valeu cada centavo."', review3_business: 'Salão de beleza',
+      final_title: 'Pronto para ter um site que realmente vende?', final_subtitle: 'Fale agora e receba seu orçamento em minutos',
+      final_cta: 'Quero meu site', footer_tagline: 'Sites que vendem', whatsapp_float_label: 'Fale com a gente',
+      default_wa: 'Olá! Vi o site da MB Studio e quero saber mais sobre criar meu site/app.',
+      services_note_wa: 'Olá! Não sei qual serviço escolher, vocês podem me ajudar a decidir?',
+      float_wa: 'Olá! Quero saber mais sobre os serviços da MB Studio.',
+      title: 'MB Studio — Sites que vendem',
+      meta_description: 'A MB Studio cria sites, lojas virtuais, apps e sistemas para comerciantes e pequenos negócios que querem vender mais.',
+      roleta_spin_done: 'Já girou',
+      roleta_result_lose: 'Não foi dessa vez. <span class="mb-roulette-result-value">Continue tentando!</span>',
+      roleta_result_win_prefix: 'Parabéns! Você ganhou ',
+      roleta_claim_opening: 'Abrindo o WhatsApp...',
+      roleta_claim_wa: 'Olá! Girei a roleta da MB Studio e ganhei {prize}% de desconto! Quero aproveitar essa oferta.',
+      roleta_share_win: 'Acabei de ganhar {prize} na Roleta da MB Studio! Gire você também e garanta seu desconto: {url}',
+      roleta_share_lose: 'Estou tentando ganhar desconto na Roleta da MB Studio! Vem tentar a sua sorte também: {url}'
+    },
+    en: {
+      nav_servicos: 'Services', nav_contato: 'Contact', header_cta: 'Chat on WhatsApp',
+      hero_badge: '⭐ 4.9 on Google',
+      hero_title_pre: "If you're invisible, you don't", hero_title_accent: 'sell',
+      hero_subtitle: 'We put your business at the top of Google search results to attract customers every day.',
+      hero_promo: '⚡ Your website from $350 · Delivered in up to 48h',
+      hero_cta: 'I want to rank on Google now',
+      hero_cta_note: 'Reply within minutes, no commitment',
+      stat1_label: 'websites delivered', stat2_label: 'of customers satisfied', stat3_label: 'Delivered in just days',
+      services_title: 'What we do for you',
+      services_subtitle: "Website, store, menu, booking — whatever your business needs",
+      svc1: 'Landing Pages', svc2: 'Business Websites', svc3: 'Online Stores', svc4: 'Digital Menu',
+      svc5: 'Online Booking', svc6: 'WhatsApp Automation', svc7: 'Web App', svc8: 'Capture Pages',
+      svc9: 'Website Maintenance', svc10: 'Fast MVPs',
+      services_note_pre: 'Not sure which service to choose?', services_note_link: 'Talk to us',
+      services_note_post: "and we'll help you decide.",
+      highlight_pre: 'You have the idea. We make it', highlight_accent: 'happen',
+      process_intro: 'You tell us your idea. We put it online. That simple.',
+      step1_title: 'Tell us your idea', step1_desc: 'Send us what you need',
+      step2_title: 'We build it', step2_desc: 'Designed with more sales in mind',
+      step3_title: 'You approve it', step3_desc: "We adjust it until it's just right",
+      step4_title: 'Live and ready', step4_desc: 'Your website working and bringing in customers',
+      roleta_title: 'Spin and win your discount', roleta_subtitle: 'Still not sure? Maybe luck can help',
+      roleta_spin: 'Spin', roleta_footer: 'One try per visitor', roleta_urgency: 'Offer valid today only',
+      roleta_claim: 'Claim prize', roleta_share: '📲 Share on WhatsApp',
+      portfolio_title: 'What we build', portfolio_subtitle: 'This is just the start — your project could be next',
+      pf1_title: 'Business website', pf1_desc: 'A professional presence for your business',
+      pf2_title: 'Online store', pf2_desc: 'Sell online without the hassle',
+      pf3_title: 'Automated WhatsApp support', pf3_desc: 'Your customer messages, the system replies instantly',
+      pf4_title: 'Online booking', pf4_desc: 'Customers book on their own, no phone calls',
+      pf5_title: 'Digital menu with online orders', pf5_desc: 'Orders straight from the phone, hassle-free',
+      pf6_title: 'Conversion tool', pf6_desc: 'Discount wheel to engage visitors',
+      pf7_title: 'Conversion tool', pf7_desc: 'Instant prize, straight to WhatsApp',
+      reviews_title: 'Tried it, loved it', reviews_subtitle: "Don't just take our word for it. See what our clients say.",
+      review1_text: '"The site turned out way better than I expected. Customers compliment it and sales have gone up."', review1_business: 'Clothing store',
+      review2_text: '"Fast service, and they understood exactly what I needed. Highly recommend."', review2_business: 'Restaurant',
+      review3_text: '"My digital menu looks great and worked from day one. Worth every penny."', review3_business: 'Beauty salon',
+      final_title: 'Ready for a website that actually sells?', final_subtitle: 'Talk to us now and get your quote in minutes',
+      final_cta: 'I want my website', footer_tagline: 'Websites that sell', whatsapp_float_label: 'Chat with us',
+      default_wa: 'Hi! I saw the MB Studio website and want to know more about creating my website/app.',
+      services_note_wa: "Hi! I'm not sure which service to choose, can you help me decide?",
+      float_wa: "Hi! I want to know more about MB Studio's services.",
+      title: 'MB Studio — Websites that sell',
+      meta_description: 'MB Studio builds websites, online stores, apps and systems for merchants and small businesses that want to sell more.',
+      roleta_spin_done: 'Already spun',
+      roleta_result_lose: 'Not this time. <span class="mb-roulette-result-value">Keep trying!</span>',
+      roleta_result_win_prefix: 'Congrats! You won ',
+      roleta_claim_opening: 'Opening WhatsApp...',
+      roleta_claim_wa: 'Hi! I spun the MB Studio wheel and won {prize}% off! I want to use this offer.',
+      roleta_share_win: 'I just won {prize} on the MB Studio Wheel! Spin it yourself and grab your discount: {url}',
+      roleta_share_lose: "I'm trying to win a discount on the MB Studio Wheel! Come try your luck too: {url}"
+    },
+    es: {
+      nav_servicos: 'Servicios', nav_contato: 'Contacto', header_cta: 'Hablar por WhatsApp',
+      hero_badge: '⭐ 4.9 en Google',
+      hero_title_pre: 'Si no apareces, no', hero_title_accent: 'vendes',
+      hero_subtitle: 'Ponemos tu negocio en el top de las búsquedas de Google para atraer clientes todos los días.',
+      hero_promo: '⚡ Tu sitio desde R$350 · Entrega en hasta 48h',
+      hero_cta: 'Quiero aparecer en Google ahora',
+      hero_cta_note: 'Respuesta en minutos, sin compromiso',
+      stat1_label: 'sitios entregados', stat2_label: 'de clientes satisfechos', stat3_label: 'Entrega en pocos días',
+      services_title: 'Lo que hacemos por ti',
+      services_subtitle: 'Sitio, tienda, menú, reservas — lo que tu negocio necesite',
+      svc1: 'Landing Pages', svc2: 'Sitios Institucionales', svc3: 'Tiendas Virtuales', svc4: 'Menú Digital',
+      svc5: 'Reservas en Línea', svc6: 'Automatización de WhatsApp', svc7: 'Aplicación Web', svc8: 'Páginas de Captura',
+      svc9: 'Mantenimiento de Sitios', svc10: 'MVPs Rápidos',
+      services_note_pre: '¿No sabes qué servicio elegir?', services_note_link: 'Habla con nosotros',
+      services_note_post: 'y te ayudamos a decidir.',
+      highlight_pre: 'Tienes la idea. Nosotros la hacemos', highlight_accent: 'realidad',
+      process_intro: 'Nos cuentas tu idea. La ponemos en línea. Así de simple.',
+      step1_title: 'Cuéntanos tu idea', step1_desc: 'Envíanos lo que necesitas',
+      step2_title: 'Nosotros la creamos', step2_desc: 'Diseñamos pensando en vender más para ti',
+      step3_title: 'Tú lo apruebas', step3_desc: 'Ajustamos hasta que quede a tu gusto',
+      step4_title: 'En línea, listo', step4_desc: 'Tu sitio funcionando y recibiendo clientes',
+      roleta_title: 'Gira y gana tu descuento', roleta_subtitle: '¿Aún no decides? Tal vez la suerte ayude',
+      roleta_spin: 'Girar', roleta_footer: 'Un intento por visitante', roleta_urgency: 'Oferta válida solo hoy',
+      roleta_claim: 'Reclamar premio', roleta_share: '📲 Compartir en WhatsApp',
+      portfolio_title: 'Lo que construimos', portfolio_subtitle: 'Esto es solo el comienzo — tu proyecto puede ser el próximo',
+      pf1_title: 'Sitio institucional', pf1_desc: 'Presencia profesional para tu negocio',
+      pf2_title: 'Tienda virtual', pf2_desc: 'Vende en línea sin complicaciones',
+      pf3_title: 'Atención automática por WhatsApp', pf3_desc: 'Tu cliente escribe, el sistema responde al instante',
+      pf4_title: 'Reservas en línea', pf4_desc: 'El cliente reserva solo, sin llamadas',
+      pf5_title: 'Menú digital con pedidos en línea', pf5_desc: 'Pedido directo desde el celular, sin complicaciones',
+      pf6_title: 'Herramienta de conversión', pf6_desc: 'Ruleta de descuentos para atraer visitantes',
+      pf7_title: 'Herramienta de conversión', pf7_desc: 'Premio al instante, directo por WhatsApp',
+      reviews_title: 'Quien lo usó, lo aprobó', reviews_subtitle: '¿Confías en nosotros? Confía primero en quienes ya nos probaron.',
+      review1_text: '"El sitio quedó mucho mejor de lo que esperaba. Los clientes lo elogian y las ventas aumentaron."', review1_business: 'Tienda de ropa',
+      review2_text: '"Atención rápida y entendieron exactamente lo que necesitaba. Lo recomiendo totalmente."', review2_business: 'Restaurante',
+      review3_text: '"Mi menú digital quedó hermoso y funcionó desde el primer día. Valió cada centavo."', review3_business: 'Salón de belleza',
+      final_title: '¿Listo para tener un sitio que realmente venda?', final_subtitle: 'Habla ahora y recibe tu presupuesto en minutos',
+      final_cta: 'Quiero mi sitio', footer_tagline: 'Sitios que venden', whatsapp_float_label: 'Habla con nosotros',
+      default_wa: '¡Hola! Vi el sitio de MB Studio y quiero saber más sobre crear mi sitio/app.',
+      services_note_wa: '¡Hola! No sé qué servicio elegir, ¿me pueden ayudar a decidir?',
+      float_wa: '¡Hola! Quiero saber más sobre los servicios de MB Studio.',
+      title: 'MB Studio — Sitios que venden',
+      meta_description: 'MB Studio crea sitios web, tiendas virtuales, apps y sistemas para comerciantes y pequeños negocios que quieren vender más.',
+      roleta_spin_done: 'Ya giraste',
+      roleta_result_lose: 'No fue esta vez. <span class="mb-roulette-result-value">¡Sigue intentando!</span>',
+      roleta_result_win_prefix: '¡Felicidades! Ganaste ',
+      roleta_claim_opening: 'Abriendo WhatsApp...',
+      roleta_claim_wa: '¡Hola! Giré la ruleta de MB Studio y gané {prize}% de descuento! Quiero aprovechar esta oferta.',
+      roleta_share_win: '¡Acabo de ganar {prize} en la Ruleta de MB Studio! Gira tú también y consigue tu descuento: {url}',
+      roleta_share_lose: '¡Estoy intentando ganar un descuento en la Ruleta de MB Studio! Ven a probar tu suerte también: {url}'
+    }
+  };
+  window.MB_I18N = I18N;
+  window.MB_LANG = 'pt';
+
+  function applyLanguage(lang){
+    var dict = I18N[lang] || I18N.pt;
+    window.MB_LANG = I18N[lang] ? lang : 'pt';
+
+    document.documentElement.setAttribute('lang', lang === 'pt' ? 'pt-BR' : lang);
+
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var key = el.getAttribute('data-i18n');
+      if (dict[key] !== undefined) el.textContent = dict[key];
+    });
+
+    document.querySelectorAll('[data-i18n-wa]').forEach(function(el){
+      var key = el.getAttribute('data-i18n-wa');
+      if (dict[key] !== undefined) {
+        el.setAttribute('data-wa-text', dict[key]);
+        buildWaLink(el);
+      }
+    });
+
+    if (dict.title) document.title = dict.title;
+    var metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc && dict.meta_description) metaDesc.setAttribute('content', dict.meta_description);
+
+    langButtons.forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-lang') === window.MB_LANG);
+    });
+
+    try { window.localStorage.setItem('mb_lang', window.MB_LANG); } catch (e) {}
+  }
+  window.MB_applyLanguage = applyLanguage;
+
   var langButtons = document.querySelectorAll('.lang-btn');
   langButtons.forEach(function(btn){
     btn.addEventListener('click', function(){
-      langButtons.forEach(function(b){ b.classList.remove('active'); });
-      btn.classList.add('active');
+      applyLanguage(btn.getAttribute('data-lang'));
     });
   });
+
+  var savedLang = 'pt';
+  try { savedLang = window.localStorage.getItem('mb_lang') || 'pt'; } catch (e) {}
+  applyLanguage(savedLang);
 
   /* ==========================================================================
      Reveal on scroll
@@ -1483,12 +1689,21 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
     return PRIZES.length - 1;
   }
 
+  /* Lê o dicionário de tradução do idioma atual (definido no <script>
+     principal). Cai para PT se, por algum motivo, ainda não tiver carregado. */
+  function currentDict() {
+    return (window.MB_I18N && window.MB_I18N[window.MB_LANG]) || (window.MB_I18N && window.MB_I18N.pt) || {};
+  }
+
   function buildShareMessage(prize) {
     var url = window.location.href;
+    var dict = currentDict();
     if (prize.text === 'Continue tentando') {
-      return 'Estou tentando ganhar desconto na Roleta da MB Studio! Vem tentar a sua sorte também: ' + url;
+      var loseTpl = dict.roleta_share_lose || 'Estou tentando ganhar desconto na Roleta da MB Studio! Vem tentar a sua sorte também: {url}';
+      return loseTpl.replace('{url}', url);
     }
-    return 'Acabei de ganhar ' + prize.text + ' na Roleta da MB Studio! Gire você também e garanta seu desconto: ' + url;
+    var winTpl = dict.roleta_share_win || 'Acabei de ganhar {prize} na Roleta da MB Studio! Gire você também e garanta seu desconto: {url}';
+    return winTpl.replace('{prize}', prize.text).replace('{url}', url);
   }
 
   function initRoulette(root) {
@@ -1521,12 +1736,14 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
          percentual, então sempre há um número aqui. */
       var prizeMatch = currentPrize.text.match(/\d+/);
       var prizeNumber = prizeMatch ? prizeMatch[0] : currentPrize.text;
-      var message = 'Olá! Girei a roleta da MB Studio e ganhei ' + prizeNumber + '% de desconto! Quero aproveitar essa oferta.';
+      var dict = currentDict();
+      var claimTpl = dict.roleta_claim_wa || 'Olá! Girei a roleta da MB Studio e ganhei {prize}% de desconto! Quero aproveitar essa oferta.';
+      var message = claimTpl.replace('{prize}', prizeNumber);
       var number = (window.MB_STUDIO_CONFIG && window.MB_STUDIO_CONFIG.whatsappNumber) || '';
 
       window.open('https://wa.me/' + number + '?text=' + encodeURIComponent(message), '_blank', 'noopener');
 
-      claimMsgEl.textContent = 'Abrindo o WhatsApp...';
+      claimMsgEl.textContent = dict.roleta_claim_opening || 'Abrindo o WhatsApp...';
       claimMsgEl.classList.add('show');
     });
 
@@ -1558,10 +1775,11 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
       playSpinSound(SPIN_DURATION_MS);
 
       window.setTimeout(function () {
+        var dict = currentDict();
         resultEl.innerHTML = prize.text === 'Continue tentando'
-          ? 'Não foi dessa vez. <span class="mb-roulette-result-value">Continue tentando!</span>'
-          : 'Parabéns! Você ganhou <span class="mb-roulette-result-value">' + prize.text + '</span>';
-        btn.textContent = 'Já girou';
+          ? (dict.roleta_result_lose || 'Não foi dessa vez. <span class="mb-roulette-result-value">Continue tentando!</span>')
+          : (dict.roleta_result_win_prefix || 'Parabéns! Você ganhou ') + '<span class="mb-roulette-result-value">' + prize.text + '</span>';
+        btn.textContent = dict.roleta_spin_done || 'Já girou';
 
         if (prize.text !== 'Continue tentando') {
           claimBtn.classList.add('show');
