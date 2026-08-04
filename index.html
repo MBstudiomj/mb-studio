@@ -409,13 +409,17 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
 .service-card{
   background:var(--color-surface); border:1px solid var(--color-border);
   border-radius:var(--radius-md); padding:30px 22px;
+  cursor:pointer;
   transition:transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
 }
-.service-card:hover{
+.service-card:hover,
+.service-card:focus-visible{
   transform:translateY(-6px);
   border-color:rgba(198,255,94,.45);
   background:var(--color-surface-alt);
 }
+.service-card:focus-visible{ outline:2px solid var(--color-accent); outline-offset:3px; }
+.service-card:active{ transform:translateY(-2px); }
 .service-icon{
   width:50px; height:50px; border-radius:14px;
   background:rgba(198,255,94,.1); color:var(--color-accent);
@@ -431,6 +435,47 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
   font-size:1.02rem; font-weight:500;
 }
 .services-note .text-accent{ font-weight:700; }
+
+/* ============================================================================
+   8B. MODAL DE SERVIÇO — um único modal reaproveitado pelos 10 cards
+   ============================================================================ */
+.service-modal-overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.78); backdrop-filter:blur(2px);
+  display:flex; align-items:center; justify-content:center; padding:20px; box-sizing:border-box;
+  opacity:0; pointer-events:none; transition:opacity .3s ease; z-index:300;
+}
+.service-modal-overlay.show{ opacity:1; pointer-events:auto; }
+.service-modal{
+  position:relative; background:#111; border:2px solid var(--color-accent); border-radius:24px;
+  padding:40px 30px 30px; max-width:440px; width:100%; max-height:85vh; overflow-y:auto;
+  box-sizing:border-box; text-align:left;
+  box-shadow:0 0 40px rgba(198,255,94,.3);
+  transform:scale(.9) translateY(10px); opacity:0;
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
+}
+.service-modal-overlay.show .service-modal{ transform:scale(1) translateY(0); opacity:1; }
+.service-modal-close{
+  position:absolute; top:12px; right:14px; appearance:none; border:none; background:transparent;
+  color:#888; font-size:1.8rem; line-height:1; cursor:pointer; padding:4px 8px; transition:color .15s ease;
+}
+.service-modal-close:hover{ color:var(--color-accent); }
+.service-modal-title{ font-size:1.4rem; margin-bottom:12px; padding-right:20px; }
+.service-modal-desc{ color:var(--color-white-soft); font-size:.98rem; margin-bottom:22px; }
+.service-modal-benefits-title{
+  color:var(--color-accent); font-weight:700; font-size:.78rem;
+  text-transform:uppercase; letter-spacing:.6px; margin-bottom:12px;
+}
+.service-modal-benefits{ list-style:none; display:flex; flex-direction:column; gap:11px; margin-bottom:28px; }
+.service-modal-benefits li{
+  display:flex; align-items:flex-start; gap:10px;
+  color:var(--color-white-soft); font-size:.92rem; line-height:1.4;
+}
+.service-modal-benefits li::before{ content:'✓'; color:var(--color-accent); font-weight:800; flex-shrink:0; }
+.service-modal-cta{ width:100%; }
+
+@media (max-width:480px){
+  .service-modal{ padding:32px 22px 24px; border-radius:20px; }
+}
 
 /* Sublinhado deslizante (esquerda -> direita) ao passar o mouse */
 .link-underline{ position:relative; cursor:pointer; }
@@ -829,44 +874,44 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
     <h2 class="section-title reveal" data-i18n="services_title">O que a gente faz por você</h2>
     <p class="section-subtitle reveal" data-i18n="services_subtitle">Site, loja, cardápio, agendamento — o que seu negócio precisar</p>
 
-    <div class="services-grid">
-      <div class="service-card reveal">
+    <div class="services-grid" id="servicesGrid">
+      <div class="service-card reveal" data-service="svc1" role="button" tabindex="0">
         <span class="service-icon"><i data-lucide="layout-template"></i></span>
         <h3 data-i18n="svc1">Landing Pages</h3>
       </div>
-      <div class="service-card reveal">
+      <div class="service-card reveal" data-service="svc2" role="button" tabindex="0">
         <span class="service-icon"><i data-lucide="building-2"></i></span>
         <h3 data-i18n="svc2">Sites Institucionais</h3>
       </div>
-      <div class="service-card reveal">
+      <div class="service-card reveal" data-service="svc3" role="button" tabindex="0">
         <span class="service-icon"><i data-lucide="shopping-cart"></i></span>
         <h3 data-i18n="svc3">Lojas Virtuais</h3>
       </div>
-      <div class="service-card reveal">
+      <div class="service-card reveal" data-service="svc4" role="button" tabindex="0">
         <span class="service-icon"><i data-lucide="utensils"></i></span>
         <h3 data-i18n="svc4">Cardápio Digital</h3>
       </div>
-      <div class="service-card reveal">
+      <div class="service-card reveal" data-service="svc5" role="button" tabindex="0">
         <span class="service-icon"><i data-lucide="calendar-check"></i></span>
         <h3 data-i18n="svc5">Agendamento Online</h3>
       </div>
-      <div class="service-card reveal">
+      <div class="service-card reveal" data-service="svc6" role="button" tabindex="0">
         <span class="service-icon"><i data-lucide="message-circle"></i></span>
         <h3 data-i18n="svc6">Automação WhatsApp</h3>
       </div>
-      <div class="service-card reveal">
+      <div class="service-card reveal" data-service="svc7" role="button" tabindex="0">
         <span class="service-icon"><i data-lucide="app-window"></i></span>
         <h3 data-i18n="svc7">Aplicativo Web</h3>
       </div>
-      <div class="service-card reveal">
+      <div class="service-card reveal" data-service="svc8" role="button" tabindex="0">
         <span class="service-icon"><i data-lucide="target"></i></span>
         <h3 data-i18n="svc8">Páginas de Captura</h3>
       </div>
-      <div class="service-card reveal">
+      <div class="service-card reveal" data-service="svc9" role="button" tabindex="0">
         <span class="service-icon"><i data-lucide="wrench"></i></span>
         <h3 data-i18n="svc9">Manutenção de Sites</h3>
       </div>
-      <div class="service-card reveal">
+      <div class="service-card reveal" data-service="svc10" role="button" tabindex="0">
         <span class="service-icon"><i data-lucide="zap"></i></span>
         <h3 data-i18n="svc10">MVPs Rápidos</h3>
       </div>
@@ -1124,6 +1169,22 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
   <span class="whatsapp-float-label" data-i18n="whatsapp_float_label">Fale com a gente</span>
 </a>
 
+<!-- ============================================================================
+     MODAL DE SERVIÇO — único, reaproveitado pelos 10 cards da seção Serviços
+     ============================================================================ -->
+<div class="service-modal-overlay" id="serviceModalOverlay">
+  <div class="service-modal" role="dialog" aria-modal="true" aria-labelledby="serviceModalTitle">
+    <button class="service-modal-close" type="button" id="serviceModalClose" aria-label="Fechar">&times;</button>
+    <h3 class="service-modal-title" id="serviceModalTitle"></h3>
+    <p class="service-modal-desc" id="serviceModalDesc"></p>
+    <p class="service-modal-benefits-title" data-i18n="service_modal_benefits_title">Benefícios</p>
+    <ul class="service-modal-benefits" id="serviceModalBenefits"></ul>
+    <a href="#" class="btn btn-primary service-modal-cta magnetic" id="serviceModalCta" data-whatsapp>
+      <i data-lucide="message-circle"></i> <span data-i18n="service_modal_cta">Falar sobre esse serviço</span>
+    </a>
+  </div>
+</div>
+
 <!-- Efeitos visuais do Hero: partículas + parallax leve -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/rellax/1.12.1/rellax.min.js"></script>
@@ -1217,6 +1278,29 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
       svc1: 'Landing Pages', svc2: 'Sites Institucionais', svc3: 'Lojas Virtuais', svc4: 'Cardápio Digital',
       svc5: 'Agendamento Online', svc6: 'Automação WhatsApp', svc7: 'Aplicativo Web', svc8: 'Páginas de Captura',
       svc9: 'Manutenção de Sites', svc10: 'MVPs Rápidos',
+      svc1_desc: 'Página única focada em vender uma ideia, produto ou serviço específico — direto ao ponto, sem distração.',
+      svc1_benefits: ['Foco total em converter quem visita', 'Ideal pra campanhas de anúncio ou lançamento', 'Carregamento rápido, funciona bem no celular', 'Botão de WhatsApp integrado'],
+      svc2_desc: 'Site profissional pra apresentar seu negócio, com informações, serviços e contato — sua presença oficial no Google.',
+      svc2_benefits: ['Aparece quando buscam seu nome no Google', 'Design profissional, adaptado ao seu negócio', 'Funciona bem no celular e no computador', 'Inclui botão de WhatsApp direto'],
+      svc3_desc: 'Loja online completa pra vender produtos, com catálogo, carrinho e finalização de pedido.',
+      svc3_benefits: ['Catálogo organizado por categoria', 'Cliente monta o carrinho e finaliza sozinho', 'Funciona 24h, mesmo com a loja fechada', 'Você recebe o pedido pronto, sem confusão'],
+      svc4_desc: 'Cardápio digital com fotos e descrição, onde o cliente já pode fazer o pedido direto pelo celular.',
+      svc4_benefits: ['Fotos e descrição de cada prato', 'Cliente monta o pedido sozinho', 'Reduz erro de pedido por telefone', 'Fácil de atualizar preços e itens'],
+      svc5_desc: 'Sistema pra cliente marcar horário sozinho, sem precisar ligar pra combinar.',
+      svc5_benefits: ['Cliente escolhe dia e horário disponível', 'Reduz tempo organizando agenda', 'Evita esquecimento e conflito de horário', 'Funciona direto do celular do cliente'],
+      svc6_desc: 'Configuramos respostas automáticas e um fluxo de atendimento inicial no WhatsApp do seu negócio, pra você não perder cliente enquanto está ocupado.',
+      svc6_benefits: ['Resposta automática mesmo fora do horário', 'Fluxo simples que direciona o cliente', 'Configurado no seu próprio número', 'Você recebe as conversas normalmente, só o início é automático'],
+      svc7_desc: 'Um "app" que o cliente instala direto do navegador, com ícone na tela do celular — sem precisar baixar na loja de aplicativos.',
+      svc7_benefits: ['Ícone na tela inicial do celular', 'Funciona rápido, sem burocracia de loja de app', 'Ideal pra cardápio, catálogo ou agendamento', 'Mais barato e rápido que um app nativo'],
+      svc8_desc: 'Página única e direta, focada em converter quem chega nela — seja pra captar contato, vender um produto específico ou levar pro WhatsApp.',
+      svc8_benefits: ['Foco total em conversão', 'Ideal pra campanhas de anúncio ou promoção', 'Carregamento rápido, funciona bem no celular', 'Pode ser reaproveitada pra outras campanhas'],
+      svc9_desc: 'Cuidamos do seu site depois de pronto: atualizações, ajustes e correções pra continuar funcionando bem.',
+      svc9_benefits: ['Atualização de textos, preços e imagens', 'Correção de bugs e problemas técnicos', 'Acompanhamento contínuo', 'Suporte direto com a MB Studio'],
+      svc10_desc: 'Versão inicial simples e funcional da sua ideia, pra testar rápido antes de investir num projeto completo.',
+      svc10_benefits: ['Validação rápida com pouco investimento', 'Funcional desde o início, não é só protótipo visual', 'Base pronta pra evoluir depois', 'Ideal pra quem quer testar antes de crescer'],
+      service_modal_benefits_title: 'Benefícios', service_modal_cta: 'Falar sobre esse serviço',
+      service_modal_wa: 'Olá! Tenho interesse em {service}, pode me passar mais detalhes?',
+      modal_close: 'Fechar',
       services_note_pre: 'Não sabe qual serviço escolher?', services_note_link: 'Fala com a gente',
       services_note_post: 'que a gente te ajuda a decidir.',
       highlight_pre: 'Você tem a ideia. A gente faz', highlight_accent: 'acontecer',
@@ -1269,6 +1353,29 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
       svc1: 'Landing Pages', svc2: 'Business Websites', svc3: 'Online Stores', svc4: 'Digital Menu',
       svc5: 'Online Booking', svc6: 'WhatsApp Automation', svc7: 'Web App', svc8: 'Capture Pages',
       svc9: 'Website Maintenance', svc10: 'Fast MVPs',
+      svc1_desc: 'A single page focused on selling one specific idea, product or service — straight to the point, no distractions.',
+      svc1_benefits: ['Fully focused on converting visitors', 'Great for ad campaigns or launches', 'Fast loading, works great on mobile', 'Built-in WhatsApp button'],
+      svc2_desc: 'A professional website to present your business, with information, services and contact — your official presence on Google.',
+      svc2_benefits: ['Shows up when people search your name on Google', 'Professional design, tailored to your business', 'Works great on mobile and desktop', 'Includes a direct WhatsApp button'],
+      svc3_desc: 'A complete online store to sell products, with catalog, cart and checkout.',
+      svc3_benefits: ['Catalog organized by category', 'Customers build their cart and checkout on their own', 'Works 24/7, even when the store is closed', 'You receive the order ready, no confusion'],
+      svc4_desc: 'A digital menu with photos and descriptions, where customers can order straight from their phone.',
+      svc4_benefits: ['Photos and description for every dish', 'Customers build their order on their own', 'Reduces phone order mistakes', 'Easy to update prices and items'],
+      svc5_desc: 'A system for customers to book their own time slot, no need to call to arrange it.',
+      svc5_benefits: ['Customers pick an available day and time', 'Saves time organizing your schedule', 'Avoids forgotten or double bookings', "Works straight from the customer's phone"],
+      svc6_desc: "We set up automatic replies and an initial support flow on your business WhatsApp, so you don't lose customers while you're busy.",
+      svc6_benefits: ['Automatic reply even outside business hours', 'Simple flow that guides the customer', 'Set up on your own number', 'You receive the conversations normally — only the start is automated'],
+      svc7_desc: 'An "app" your customer installs straight from the browser, with an icon on their phone\'s home screen — no app store download needed.',
+      svc7_benefits: ["Icon on the phone's home screen", 'Fast, no app store red tape', 'Great for menus, catalogs or bookings', 'Cheaper and faster than a native app'],
+      svc8_desc: 'A single, direct page focused on converting whoever lands on it — whether to capture contacts, sell a specific product, or drive traffic to WhatsApp.',
+      svc8_benefits: ['Fully focused on conversion', 'Great for ad campaigns or promotions', 'Fast loading, works great on mobile', 'Can be reused for other campaigns'],
+      svc9_desc: "We take care of your website after it's live: updates, tweaks and fixes to keep it running well.",
+      svc9_benefits: ['Updates to text, prices and images', 'Bug fixes and technical issues resolved', 'Ongoing monitoring', 'Direct support from MB Studio'],
+      svc10_desc: 'A simple, working first version of your idea, to test it quickly before investing in a full project.',
+      svc10_benefits: ['Quick validation with low investment', 'Functional from the start, not just a visual prototype', 'A ready foundation to build on later', 'Great for testing before you scale'],
+      service_modal_benefits_title: 'Benefits', service_modal_cta: 'Ask about this service',
+      service_modal_wa: "Hi! I'm interested in {service}, can you give me more details?",
+      modal_close: 'Close',
       services_note_pre: 'Not sure which service to choose?', services_note_link: 'Talk to us',
       services_note_post: "and we'll help you decide.",
       highlight_pre: 'You have the idea. We make it', highlight_accent: 'happen',
@@ -1321,6 +1428,29 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
       svc1: 'Landing Pages', svc2: 'Sitios Institucionales', svc3: 'Tiendas Virtuales', svc4: 'Menú Digital',
       svc5: 'Reservas en Línea', svc6: 'Automatización de WhatsApp', svc7: 'Aplicación Web', svc8: 'Páginas de Captura',
       svc9: 'Mantenimiento de Sitios', svc10: 'MVPs Rápidos',
+      svc1_desc: 'Página única enfocada en vender una idea, producto o servicio específico — directo al punto, sin distracciones.',
+      svc1_benefits: ['Enfoque total en convertir visitantes', 'Ideal para campañas de anuncios o lanzamientos', 'Carga rápida, funciona bien en el celular', 'Botón de WhatsApp integrado'],
+      svc2_desc: 'Sitio profesional para presentar tu negocio, con información, servicios y contacto — tu presencia oficial en Google.',
+      svc2_benefits: ['Aparece cuando buscan tu nombre en Google', 'Diseño profesional, adaptado a tu negocio', 'Funciona bien en el celular y en la computadora', 'Incluye botón de WhatsApp directo'],
+      svc3_desc: 'Tienda en línea completa para vender productos, con catálogo, carrito y finalización de compra.',
+      svc3_benefits: ['Catálogo organizado por categoría', 'El cliente arma el carrito y finaliza solo', 'Funciona 24 horas, incluso con la tienda cerrada', 'Recibes el pedido listo, sin confusión'],
+      svc4_desc: 'Menú digital con fotos y descripción, donde el cliente ya puede hacer el pedido directo desde el celular.',
+      svc4_benefits: ['Fotos y descripción de cada plato', 'El cliente arma el pedido solo', 'Reduce errores de pedidos por teléfono', 'Fácil de actualizar precios e ítems'],
+      svc5_desc: 'Sistema para que el cliente reserve su horario solo, sin necesidad de llamar para coordinar.',
+      svc5_benefits: ['El cliente elige día y horario disponible', 'Reduce el tiempo organizando la agenda', 'Evita olvidos y conflictos de horario', 'Funciona directo desde el celular del cliente'],
+      svc6_desc: 'Configuramos respuestas automáticas y un flujo de atención inicial en el WhatsApp de tu negocio, para que no pierdas clientes mientras estás ocupado.',
+      svc6_benefits: ['Respuesta automática incluso fuera de horario', 'Flujo simple que orienta al cliente', 'Configurado en tu propio número', 'Recibes las conversaciones normalmente, solo el inicio es automático'],
+      svc7_desc: 'Una "app" que el cliente instala directo desde el navegador, con ícono en la pantalla del celular — sin necesidad de descargar en la tienda de aplicaciones.',
+      svc7_benefits: ['Ícono en la pantalla de inicio del celular', 'Funciona rápido, sin burocracia de tienda de apps', 'Ideal para menú, catálogo o reservas', 'Más barato y rápido que una app nativa'],
+      svc8_desc: 'Página única y directa, enfocada en convertir a quien llega a ella — ya sea para captar contacto, vender un producto específico o llevar al WhatsApp.',
+      svc8_benefits: ['Enfoque total en conversión', 'Ideal para campañas de anuncios o promociones', 'Carga rápida, funciona bien en el celular', 'Se puede reutilizar para otras campañas'],
+      svc9_desc: 'Cuidamos tu sitio después de que esté listo: actualizaciones, ajustes y correcciones para que siga funcionando bien.',
+      svc9_benefits: ['Actualización de textos, precios e imágenes', 'Corrección de errores y problemas técnicos', 'Seguimiento continuo', 'Soporte directo con MB Studio'],
+      svc10_desc: 'Versión inicial simple y funcional de tu idea, para probarla rápido antes de invertir en un proyecto completo.',
+      svc10_benefits: ['Validación rápida con poca inversión', 'Funcional desde el inicio, no es solo un prototipo visual', 'Base lista para evolucionar después', 'Ideal para quienes quieren probar antes de crecer'],
+      service_modal_benefits_title: 'Beneficios', service_modal_cta: 'Preguntar sobre este servicio',
+      service_modal_wa: '¡Hola! Tengo interés en {service}, ¿me pueden dar más detalles?',
+      modal_close: 'Cerrar',
       services_note_pre: '¿No sabes qué servicio elegir?', services_note_link: 'Habla con nosotros',
       services_note_post: 'y te ayudamos a decidir.',
       highlight_pre: 'Tienes la idea. Nosotros la hacemos', highlight_accent: 'realidad',
@@ -1386,6 +1516,9 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
     var metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc && dict.meta_description) metaDesc.setAttribute('content', dict.meta_description);
 
+    var serviceModalClose = document.getElementById('serviceModalClose');
+    if (serviceModalClose && dict.modal_close) serviceModalClose.setAttribute('aria-label', dict.modal_close);
+
     langButtons.forEach(function(b){
       b.classList.toggle('active', b.getAttribute('data-lang') === window.MB_LANG);
     });
@@ -1404,6 +1537,71 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
   var savedLang = 'pt';
   try { savedLang = window.localStorage.getItem('mb_lang') || 'pt'; } catch (e) {}
   applyLanguage(savedLang);
+
+  /* ==========================================================================
+     Modal de serviço — clicável (mouse e teclado), mesmo em mobile.
+     Um único modal é reaproveitado pelos 10 cards; o conteúdo é montado a
+     partir do dicionário de tradução no momento do clique, então já abre
+     sempre no idioma selecionado no momento.
+     ========================================================================== */
+  var serviceModalOverlay = document.getElementById('serviceModalOverlay');
+  var serviceModalTitle = document.getElementById('serviceModalTitle');
+  var serviceModalDesc = document.getElementById('serviceModalDesc');
+  var serviceModalBenefits = document.getElementById('serviceModalBenefits');
+  var serviceModalCta = document.getElementById('serviceModalCta');
+  var serviceModalCloseBtn = document.getElementById('serviceModalClose');
+  var lastFocusedCard = null;
+
+  function openServiceModal(key){
+    var dict = (window.MB_I18N && window.MB_I18N[window.MB_LANG]) || {};
+    if (!dict[key]) return;
+
+    serviceModalTitle.textContent = dict[key];
+    serviceModalDesc.textContent = dict[key + '_desc'] || '';
+
+    serviceModalBenefits.innerHTML = '';
+    var benefits = dict[key + '_benefits'] || [];
+    benefits.forEach(function(benefit){
+      var li = document.createElement('li');
+      li.textContent = benefit;
+      serviceModalBenefits.appendChild(li);
+    });
+
+    var waTpl = dict.service_modal_wa || 'Olá! Tenho interesse em {service}, pode me passar mais detalhes?';
+    serviceModalCta.setAttribute('data-wa-text', waTpl.replace('{service}', dict[key]));
+    buildWaLink(serviceModalCta);
+
+    serviceModalOverlay.classList.add('show');
+    serviceModalCloseBtn.focus();
+  }
+
+  function closeServiceModal(){
+    serviceModalOverlay.classList.remove('show');
+    if (lastFocusedCard) { lastFocusedCard.focus(); lastFocusedCard = null; }
+  }
+
+  var serviceCards = document.querySelectorAll('.service-card');
+  serviceCards.forEach(function(card){
+    card.addEventListener('click', function(){
+      lastFocusedCard = card;
+      openServiceModal(card.getAttribute('data-service'));
+    });
+    card.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();
+        lastFocusedCard = card;
+        openServiceModal(card.getAttribute('data-service'));
+      }
+    });
+  });
+
+  serviceModalCloseBtn.addEventListener('click', closeServiceModal);
+  serviceModalOverlay.addEventListener('click', function(e){
+    if (e.target === serviceModalOverlay) closeServiceModal();
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && serviceModalOverlay.classList.contains('show')) closeServiceModal();
+  });
 
   /* ==========================================================================
      Reveal on scroll
