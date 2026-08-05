@@ -521,6 +521,78 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
 @media (max-width:600px){ .services-grid{ grid-template-columns:1fr; } }
 
 /* ============================================================================
+   8B. PROGRAMA DE INDICAÇÃO
+   ============================================================================ */
+.referral{ background:var(--color-black-soft); }
+
+@keyframes referral-pulse{
+  0%, 100%{ box-shadow:0 0 50px rgba(198,255,94,.18), 0 12px 40px rgba(0,0,0,.4); }
+  50%{ box-shadow:0 0 74px rgba(198,255,94,.32), 0 12px 40px rgba(0,0,0,.4); }
+}
+.referral-highlight{
+  position:relative; max-width:640px; margin:44px auto 0;
+  background:var(--color-surface);
+  border:2px solid var(--color-accent);
+  border-radius:var(--radius-lg);
+  padding:40px 36px;
+  text-align:center;
+  animation:referral-pulse 3s ease-in-out infinite;
+}
+.referral-highlight-text{
+  font-family:var(--font-heading); font-weight:700;
+  font-size:clamp(1.05rem, 2.6vw, 1.3rem);
+  color:var(--color-white); line-height:1.5;
+}
+.referral-value{
+  display:inline-block;
+  font-family:var(--font-heading); font-weight:900;
+  font-size:clamp(2.4rem, 7vw, 3.4rem);
+  color:var(--color-accent);
+  margin:4px 2px;
+  text-shadow:0 0 30px rgba(198,255,94,.5);
+}
+.referral-note{
+  color:var(--color-white-soft); font-size:.95rem;
+  margin-top:18px; margin-bottom:28px;
+}
+.referral-highlight .btn{ margin-inline:auto; }
+
+.referral-rules{
+  max-width:640px; margin:28px auto 0;
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--color-border);
+  border-radius:var(--radius-md);
+  padding:28px 30px;
+}
+.referral-rules-title{
+  color:var(--color-accent); font-weight:700; font-size:.78rem;
+  text-transform:uppercase; letter-spacing:.6px; margin-bottom:16px;
+}
+.referral-rules-list{
+  list-style:none; counter-reset:referral-rule;
+  display:flex; flex-direction:column; gap:13px;
+}
+.referral-rules-list li{
+  position:relative; padding-left:32px;
+  color:var(--color-white-soft); font-size:.92rem; line-height:1.5;
+  counter-increment:referral-rule;
+}
+.referral-rules-list li::before{
+  content:counter(referral-rule);
+  position:absolute; left:0; top:1px;
+  width:20px; height:20px; border-radius:50%;
+  background:rgba(198,255,94,.15); color:var(--color-accent);
+  font-weight:800; font-size:.72rem; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+
+@media (max-width:480px){
+  .referral-highlight{ padding:30px 22px; }
+  .referral-rules{ padding:22px 20px; }
+}
+
+/* ============================================================================
    9. FRASE DE DESTAQUE ISOLADA
    ============================================================================ */
 .highlight{ padding:100px 0; background:var(--color-black); text-align:center; overflow:hidden; }
@@ -975,6 +1047,39 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
 </section>
 
 <!-- ============================================================================
+     PROGRAMA DE INDICAÇÃO
+     ============================================================================ -->
+<section class="referral section-pad" id="indicacao">
+  <div class="container">
+    <h2 class="section-title reveal" data-i18n="referral_title">Indique. Ganhe. Simples assim.</h2>
+    <p class="section-subtitle reveal" data-i18n="referral_subtitle">Não precisa saber vender. Só precisa conhecer alguém que precisa de um site.</p>
+
+    <div class="referral-highlight reveal">
+      <p class="referral-highlight-text">
+        <span data-i18n="referral_highlight_line1">Fechou um contrato de R$1.000 pela sua indicação?</span><br>
+        <span data-i18n="referral_highlight_line2_pre">Você recebe</span> <span class="referral-value">R$250</span><span data-i18n="referral_highlight_line2_post">. Assim, direto.</span>
+      </p>
+      <p class="referral-note" data-i18n="referral_note">25% de comissão em qualquer indicação fechada, sem limite de quantas vezes.</p>
+      <a href="#" class="btn btn-primary magnetic" data-whatsapp
+         data-i18n-wa="referral_wa" data-wa-text="Olá! Quero saber mais sobre o programa de indicação da MB Studio.">
+        <i data-lucide="message-circle"></i> <span data-i18n="referral_cta">Quero indicar alguém</span>
+      </a>
+    </div>
+
+    <div class="referral-rules reveal">
+      <p class="referral-rules-title" data-i18n="referral_rules_title">Regras do programa</p>
+      <ol class="referral-rules-list">
+        <li data-i18n="referral_rule1">A indicação precisa ser avisada à MB Studio ANTES do primeiro contato com o cliente indicado</li>
+        <li data-i18n="referral_rule2">A comissão de 25% é calculada sobre o valor líquido do contrato fechado</li>
+        <li data-i18n="referral_rule3">O pagamento da comissão é feito somente após a confirmação do pagamento do cliente indicado</li>
+        <li data-i18n="referral_rule4">Não há limite de quantas pessoas você pode indicar</li>
+        <li data-i18n="referral_rule5">Indicações não avisadas previamente, ou de clientes que já estavam em negociação com a MB Studio, não são elegíveis para comissão</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================================
      FRASE DE DESTAQUE ISOLADA
      ============================================================================ -->
 <section class="highlight">
@@ -1353,6 +1458,19 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
       modal_close: 'Fechar',
       services_note_pre: 'Não sabe qual serviço escolher?', services_note_link: 'Fala com a gente',
       services_note_post: 'que a gente te ajuda a decidir.',
+      referral_title: 'Indique. Ganhe. Simples assim.',
+      referral_subtitle: 'Não precisa saber vender. Só precisa conhecer alguém que precisa de um site.',
+      referral_highlight_line1: 'Fechou um contrato de R$1.000 pela sua indicação?',
+      referral_highlight_line2_pre: 'Você recebe', referral_highlight_line2_post: '. Assim, direto.',
+      referral_note: '25% de comissão em qualquer indicação fechada, sem limite de quantas vezes.',
+      referral_cta: 'Quero indicar alguém',
+      referral_wa: 'Olá! Quero saber mais sobre o programa de indicação da MB Studio.',
+      referral_rules_title: 'Regras do programa',
+      referral_rule1: 'A indicação precisa ser avisada à MB Studio ANTES do primeiro contato com o cliente indicado',
+      referral_rule2: 'A comissão de 25% é calculada sobre o valor líquido do contrato fechado',
+      referral_rule3: 'O pagamento da comissão é feito somente após a confirmação do pagamento do cliente indicado',
+      referral_rule4: 'Não há limite de quantas pessoas você pode indicar',
+      referral_rule5: 'Indicações não avisadas previamente, ou de clientes que já estavam em negociação com a MB Studio, não são elegíveis para comissão',
       highlight_pre: 'Você tem a ideia. A gente faz', highlight_accent: 'acontecer',
       process_intro: 'Você conta sua ideia. A gente coloca no ar. Simples assim.',
       step1_title: 'Conte sua ideia', step1_desc: 'Manda pra gente o que você precisa',
@@ -1430,6 +1548,19 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
       modal_close: 'Close',
       services_note_pre: 'Not sure which service to choose?', services_note_link: 'Talk to us',
       services_note_post: "and we'll help you decide.",
+      referral_title: 'Refer. Earn. That simple.',
+      referral_subtitle: "You don't need to know how to sell. You just need to know someone who needs a website.",
+      referral_highlight_line1: 'Closed a R$1,000 contract through your referral?',
+      referral_highlight_line2_pre: 'You get', referral_highlight_line2_post: '. Just like that.',
+      referral_note: '25% commission on any closed referral, no limit on how many.',
+      referral_cta: 'I want to refer someone',
+      referral_wa: "Hi! I want to know more about MB Studio's referral program.",
+      referral_rules_title: 'Program rules',
+      referral_rule1: 'MB Studio must be notified about the referral BEFORE the first contact with the referred customer',
+      referral_rule2: "The 25% commission is calculated on the closed contract's net value",
+      referral_rule3: "The commission is paid only after the referred customer's payment is confirmed",
+      referral_rule4: "There's no limit to how many people you can refer",
+      referral_rule5: 'Referrals not reported in advance, or of customers already in talks with MB Studio, are not eligible for commission',
       highlight_pre: 'You have the idea. We make it', highlight_accent: 'happen',
       process_intro: 'You tell us your idea. We put it online. That simple.',
       step1_title: 'Tell us your idea', step1_desc: 'Send us what you need',
@@ -1507,6 +1638,19 @@ body.nav-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-4
       modal_close: 'Cerrar',
       services_note_pre: '¿No sabes qué servicio elegir?', services_note_link: 'Habla con nosotros',
       services_note_post: 'y te ayudamos a decidir.',
+      referral_title: 'Recomienda. Gana. Así de simple.',
+      referral_subtitle: 'No necesitas saber vender. Solo necesitas conocer a alguien que necesite un sitio web.',
+      referral_highlight_line1: '¿Cerraste un contrato de R$1.000 gracias a tu recomendación?',
+      referral_highlight_line2_pre: 'Recibes', referral_highlight_line2_post: '. Así, directo.',
+      referral_note: '25% de comisión en cualquier recomendación cerrada, sin límite de cuántas veces.',
+      referral_cta: 'Quiero recomendar a alguien',
+      referral_wa: '¡Hola! Quiero saber más sobre el programa de recomendación de MB Studio.',
+      referral_rules_title: 'Reglas del programa',
+      referral_rule1: 'La recomendación debe avisarse a MB Studio ANTES del primer contacto con el cliente recomendado',
+      referral_rule2: 'La comisión del 25% se calcula sobre el valor neto del contrato cerrado',
+      referral_rule3: 'El pago de la comisión se realiza solo después de confirmarse el pago del cliente recomendado',
+      referral_rule4: 'No hay límite de cuántas personas puedes recomendar',
+      referral_rule5: 'Recomendaciones no avisadas con anticipación, o de clientes que ya estaban en negociación con MB Studio, no son elegibles para comisión',
       highlight_pre: 'Tienes la idea. Nosotros la hacemos', highlight_accent: 'realidad',
       process_intro: 'Nos cuentas tu idea. La ponemos en línea. Así de simple.',
       step1_title: 'Cuéntanos tu idea', step1_desc: 'Envíanos lo que necesitas',
